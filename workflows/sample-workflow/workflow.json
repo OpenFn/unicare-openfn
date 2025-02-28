@@ -1,0 +1,29 @@
+{
+  "options": {
+    "start": "get-data",
+    "timeout": 1200000
+  },
+  "workflow": {
+    "steps": [
+      {
+        "id": "get-data",
+        "adaptor": "mssql@5.0.10",
+        "state": {
+          "lastSync": "2025-01-01T00:00:00.000Z"
+        },
+        "configuration": "./tmp/db-credential.json",
+        "expression": "get-data.js",
+        "next": {
+          "post-data": "!state.errors && state.patients.length > 0"
+        }
+      },
+      {
+        "id": "post-data",
+        "adaptor": "http@latest",
+        "configuration": "./tmp/api-credential.json",
+        "state": {},
+        "expression": "post-data.js"
+      }
+    ]
+  }
+}
