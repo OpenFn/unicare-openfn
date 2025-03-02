@@ -14,15 +14,25 @@
     "inform-to-unicare": {
       "id": "020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b",
       "name": "inform-to-unicare",
-      "inserted_at": "2025-03-02T18:53:04.571010Z",
-      "lock_version": 1,
-      "triggers": {
-        "webhook": {
-          "enabled": false,
-          "id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
-          "type": "webhook"
+      "edges": {
+        "webhook->Map-data": {
+          "enabled": true,
+          "id": "bb8a1c2e-9a1f-4f30-8415-b1761836d242",
+          "target_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
+          "source_trigger_id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
+          "condition_type": "always"
+        },
+        "Map-data->Register-feedback-in-Primero": {
+          "enabled": true,
+          "id": "3ed49713-a283-4186-809b-c18f067f7291",
+          "target_job_id": "e9638134-ed2e-4bdc-848f-78b0e093983f",
+          "source_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
+          "condition_type": "on_job_success"
         }
       },
+      "concurrency": null,
+      "inserted_at": "2025-03-02T18:53:04Z",
+      "updated_at": "2025-03-02T18:53:04Z",
       "jobs": {
         "Map-data": {
           "id": "76c60756-dd0a-4d96-8070-31a6191449cc",
@@ -39,22 +49,15 @@
           "project_credential_id": null
         }
       },
-      "edges": {
-        "webhook->Map-data": {
-          "enabled": true,
-          "id": "bb8a1c2e-9a1f-4f30-8415-b1761836d242",
-          "target_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
-          "source_trigger_id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
-          "condition_type": "always"
-        },
-        "Map-data->Register-feedback-in-Primero": {
-          "enabled": true,
-          "id": "3ed49713-a283-4186-809b-c18f067f7291",
-          "target_job_id": "e9638134-ed2e-4bdc-848f-78b0e093983f",
-          "source_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
-          "condition_type": "on_job_success"
+      "triggers": {
+        "webhook": {
+          "enabled": false,
+          "id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
+          "type": "webhook"
         }
-      }
+      },
+      "deleted_at": null,
+      "lock_version": 1
     }
   },
   "requires_mfa": false
