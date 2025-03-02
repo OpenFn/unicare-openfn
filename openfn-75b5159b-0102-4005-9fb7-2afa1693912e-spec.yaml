@@ -1,0 +1,39 @@
+name: unicare-bih
+description: null
+collections: null
+credentials: null
+workflows:
+  inform-to-unicare:
+    name: inform-to-unicare
+    jobs:
+      Map-data:
+        name: Map data
+        adaptor: '@openfn/language-common@latest'
+        credential: null
+        body: |
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+
+      Register-feedback-in-Primero:
+        name: Register feedback in Primero
+        adaptor: '@openfn/language-primero@latest'
+        credential: null
+        body: |
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+
+    triggers:
+      webhook:
+        type: webhook
+        enabled: false
+    edges:
+      webhook->Map-data:
+        source_trigger: webhook
+        target_job: Map-data
+        condition_type: always
+        enabled: true
+      Map-data->Register-feedback-in-Primero:
+        source_job: Map-data
+        target_job: Register-feedback-in-Primero
+        condition_type: on_job_success
+        enabled: true

@@ -1,0 +1,61 @@
+{
+  "id": "75b5159b-0102-4005-9fb7-2afa1693912e",
+  "name": "unicare-bih",
+  "description": null,
+  "inserted_at": "2025-02-28T09:01:31Z",
+  "updated_at": "2025-02-28T09:01:31Z",
+  "scheduled_deletion": null,
+  "project_credentials": {},
+  "history_retention_period": 7,
+  "dataclip_retention_period": null,
+  "retention_policy": "retain_all",
+  "collections": {},
+  "workflows": {
+    "inform-to-unicare": {
+      "id": "020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b",
+      "name": "inform-to-unicare",
+      "inserted_at": "2025-03-02T18:53:04.571010Z",
+      "lock_version": 1,
+      "triggers": {
+        "webhook": {
+          "enabled": false,
+          "id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
+          "type": "webhook"
+        }
+      },
+      "jobs": {
+        "Map-data": {
+          "id": "76c60756-dd0a-4d96-8070-31a6191449cc",
+          "name": "Map data",
+          "body": "// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\n",
+          "adaptor": "@openfn/language-common@latest",
+          "project_credential_id": null
+        },
+        "Register-feedback-in-Primero": {
+          "id": "e9638134-ed2e-4bdc-848f-78b0e093983f",
+          "name": "Register feedback in Primero",
+          "body": "// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\n",
+          "adaptor": "@openfn/language-primero@latest",
+          "project_credential_id": null
+        }
+      },
+      "edges": {
+        "webhook->Map-data": {
+          "enabled": true,
+          "id": "bb8a1c2e-9a1f-4f30-8415-b1761836d242",
+          "target_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
+          "source_trigger_id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
+          "condition_type": "always"
+        },
+        "Map-data->Register-feedback-in-Primero": {
+          "enabled": true,
+          "id": "3ed49713-a283-4186-809b-c18f067f7291",
+          "target_job_id": "e9638134-ed2e-4bdc-848f-78b0e093983f",
+          "source_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
+          "condition_type": "on_job_success"
+        }
+      }
+    }
+  },
+  "requires_mfa": false
+}
