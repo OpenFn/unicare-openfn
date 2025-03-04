@@ -4,7 +4,8 @@
   "description": null,
   "concurrency": null,
   "inserted_at": "2025-02-28T09:01:31Z",
-  "updated_at": "2025-02-28T09:01:31Z",
+  "updated_at": "2025-03-04T13:23:58Z",
+  "scheduled_deletion": null,
   "project_credentials": {
     "rediet@openfn.org-Unicare-BIH-Primero-Demo": {
       "id": "687e2087-42c2-4e7c-996d-c6baa3bc40ab",
@@ -12,7 +13,6 @@
       "owner": "rediet@openfn.org"
     }
   },
-  "scheduled_deletion": null,
   "history_retention_period": 7,
   "dataclip_retention_period": null,
   "retention_policy": "retain_all",
@@ -21,8 +21,8 @@
     "inform-to-unicare": {
       "id": "020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b",
       "name": "inform-to-unicare",
-      "inserted_at": "2025-03-04T13:18:12.736990Z",
-      "lock_version": 19,
+      "inserted_at": "2025-03-04T13:36:02.654502Z",
+      "lock_version": 20,
       "triggers": {
         "webhook": {
           "enabled": true,
@@ -41,7 +41,7 @@
         "Register-feedback-in-Primero": {
           "id": "e9638134-ed2e-4bdc-848f-78b0e093983f",
           "name": "Register feedback in Primero",
-          "body": "//Create case to be sent to primero\ncreateCase({\n  data: {\n    registration_date: state.data.registration_date,\n    location_current: \"BIH\", //TO BE MODIFIED\n    feedback_comment_f076498: state.data.feedback_comment_f076498,\n    sex: state.mappedData.sex,\n    name_first: state.data.name_first,\n    name_last: state.data.name_last,\n    age_range_3df3bdb: state.mappedData.age_range_3df3bdb,\n    disclosure_other_orgs: state.mappedData.disclosure_other_orgs, \n    date_of_birth: state.data.date_of_birth,\n    nationality: state.mappedData.nationality,\n    preferred_channel_of_communication_f25a28d: state.mappedData.preferred_channel_of_communication_f25a28d, \n    case_category_80a3d81: state.mappedData.case_category_80a3d81,\n    programmatic_area_26ac9e6: state.mappedData.programmatic_area_26ac9e6,\n    risk_level: state.mappedData.risk_level,\n    sensitivity_c758743: state.mappedData.sensitivity_c758743,\n    module_id: \"primeromodule-cp\",\n  },\n});",
+          "body": "//Create case to be sent to primero\ncreateCase({\n  data: {\n    registration_date: state.data.registration_date,\n    location_current: \"BIH\", //TO BE MODIFIED\n    feedback_comment_f076498: state.data.feedback_comment_f076498,\n    sex: state.mappedData.sex,\n    name_first: state.data.name_first,\n    name_last: state.data.name_last,\n    age_range_3df3bdb: state.mappedData.age_range_3df3bdb,\n    disclosure_other_orgs: state.mappedData.disclosure_other_orgs, \n    date_of_birth: state.data.date_of_birth,\n    nationality: state.mappedData.nationality,\n    preferred_channel_of_communication_f25a28d: state.mappedData.preferred_channel_of_communication_f25a28d, \n    case_category_80a3d81: state.mappedData.case_category_80a3d81,\n    programmatic_area_26ac9e6: state.mappedData.programmatic_area_26ac9e6,\n    risk_level: state.mappedData.risk_level,\n    sensitivity_c758743: state.mappedData.sensitivity_c758743,\n    feedback_channel_eba5764: 'mobile_teams__field_staff__monitors_afdfc51',\n    module_id: \"primeromodule-cp\",\n  },\n});",
           "adaptor": "@openfn/language-primero@latest",
           "project_credential_id": "687e2087-42c2-4e7c-996d-c6baa3bc40ab"
         }

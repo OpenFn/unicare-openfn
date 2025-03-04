@@ -379,6 +379,7 @@ workflows:
               programmatic_area_26ac9e6: state.mappedData.programmatic_area_26ac9e6,
               risk_level: state.mappedData.risk_level,
               sensitivity_c758743: state.mappedData.sensitivity_c758743,
+              feedback_channel_eba5764: 'mobile_teams__field_staff__monitors_afdfc51',
               module_id: "primeromodule-cp",
             },
           });
