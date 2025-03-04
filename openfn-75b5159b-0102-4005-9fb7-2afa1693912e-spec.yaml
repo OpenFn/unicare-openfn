@@ -1,39 +1,383 @@
 name: unicare-bih
 description: null
 collections: null
-credentials: null
+credentials:
+  rediet@openfn.org-Unicare-BIH-Primero-Demo:
+    name: Unicare BIH Primero Demo
+    owner: rediet@openfn.org
 workflows:
   inform-to-unicare:
     name: inform-to-unicare
     jobs:
-      Map-data:
-        name: Map data
+      Transform-and-Map-data:
+        name: Transform and Map data
         adaptor: '@openfn/language-common@latest'
         credential: null
         body: |
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+          fn(state => {
+          console.log('Preparing and cleaning case data...'); 
+            //Prepare mapping constants between inform and primero
+          const genderMapping = {
+            "Male": "male",
+            "Female": "female",
+            "Non_binary": "other",
+            "Prefer_not_to_say": "preferred_not_to_indicate_37248fa"
+          };
 
+          const nationalityMapping = {
+            "Afghanistan": "afghanistan",
+            "Albania": "albania",
+            "Algeria": "algeria",
+            "Andorra": "andorra",
+            "Angola": "angola",
+            "Antigua_and_Barbuda": "antigua_and_barbuda",
+            "Argentina": "argentina",
+            "Armenia": "armenia",
+            "Australia": "australia",
+            "Austria": "austria",
+            "Azerbaijan": "azerbaijan",
+            "Bahamas": "bahamas",
+            "Bahrain": "bahrain",
+            "Bangladesh": "bangladesh",
+            "Barbados": "barbados",
+            "Belarus": "belarus",
+            "Belgium": "belgium",
+            "Belize": "belize",
+            "Benin": "benin",
+            "Bhutan": "bhutan",
+            "Bolivia": "bolivia",
+            "Bosnia_and_Herzegovina": "bosnia_and_herzegovina",
+            "Botswana": "botswana",
+            "Brazil": "brazil",
+            "Brunei": "brunei",
+            "Bulgaria": "bulgaria",
+            "Burkina Faso": "burkina_faso",
+            "Burundi": "burundi",
+            "Cabo Verde": "cabo_verde",
+            "Cambodia": "cambodia",
+            "Cameroon": "cameroon",
+            "Canada": "canada",
+            "Central_African_Republic": "central_african_republic",
+            "Chad": "chad",
+            "Chile": "chile",
+            "China": "china",
+            "Colombia": "colombia",
+            "Comoros": "comoros",
+            "Congo-Brazzaville": "congo",
+            "Democratic_Republic_of_the_Congo": "drc",
+            "Costa_Rica": "costa_rica",
+            "Cote_d'Ivoire": "cote_divoire",
+            "Croatia": "croatia",
+            "Cuba": "cuba",
+            "Cyprus": "cyprus",
+            "Czechia": "czech_republic",
+            "Denmark": "denmark",
+            "Djibouti": "djibouti",
+            "Dominica": "dominica",
+            "Dominican_Republic": "dominican_republic",
+            "Ecuador": "ecuador",
+            "Egypt": "egypt",
+            "El_Salvador": "el_salvador",
+            "Equatorial_Guinea": "equatorial_guinea",
+            "Eritrea": "eritrea",
+            "Estonia": "estonia",
+            "Ethiopia": "ethiopia",
+            "Fiji": "fiji",
+            "Finland": "finland",
+            "France": "france",
+            "Gabon": "gabon",
+            "Gambia": "gambia",
+            "Georgia": "georgia",
+            "Germany": "germany",
+            "Ghana": "ghana",
+            "Greece": "greece",
+            "Grenada": "grenada",
+            "Guatemala": "guatemala",
+            "Guinea": "guinea",
+            "Guinea_Bissau": "guinea_bissau",
+            "Guyana": "guyana",
+            "Haiti": "haiti",
+            "Honduras": "honduras",
+            "Hungary": "hungary",
+            "Iceland": "iceland",
+            "India": "india",
+            "Indonesia": "indonesia",
+            "Iran": "iran",
+            "Iraq": "iraq",
+            "Ireland": "ireland",
+            "Israel": "israel",
+            "Italy": "italy",
+            "Jamaica": "jamaica",
+            "Japan": "japan",
+            "Jordan": "jordan",
+            "Kazakhstan": "kazakhstan",
+            "Kenya": "kenya",
+            "Kiribati": "kiribati",
+            "Kosovo": "kosovo",
+            "Kuwait": "kuwait",
+            "Kyrgyzstan": "kyrgyzstan",
+            "Laos": "laos",
+            "Latvia": "latvia",
+            "Lebanon": "lebanon",
+            "Lesotho": "lesotho",
+            "Liberia": "liberia",
+            "Libya": "libya",
+            "Liechtenstein": "liechtenstein",
+            "Lithuania": "lithuania",
+            "Luxembourg": "luxembourg",
+            "Macedonia": "macedonia",
+            "Madagascar": "madagascar",
+            "Malawi": "malawi",
+            "Malaysia": "malaysia",
+            "Maldives": "maldives",
+            "Mali": "mali",
+            "Malta": "malta",
+            "Marshall_Islands": "marshall_islands",
+            "Mauritania": "mauritania",
+            "Mauritius": "mauritius",
+            "Mexico": "mexico",
+            "Micronesia": "micronesia",
+            "Moldova": "moldova",
+            "Monaco": "monaco",
+            "Mongolia": "mongolia",
+            "Montenegro": "montenegro",
+            "Morocco": "morocco",
+            "Mozambique": "mozambique",
+            "Myanmar": "myanmar",
+            "Namibia": "namibia",
+            "Nauru": "nauru",
+            "Nepal": "nepal",
+            "Netherlands": "netherlands",
+            "New_Zealand": "new_zealand",
+            "Nicaragua": "nicaragua",
+            "Niger": "niger",
+            "Nigeria": "nigeria",
+            "North_Korea": "north_korea",
+            "Norway": "norway",
+            "Oman": "oman",
+            "Pakistan": "pakistan",
+            "Palau": "palau",
+            "Palestine_State": "palestine",
+            "Panama": "panama",
+            "Papua_New_Guinea": "papua_new_guinea",
+            "Paraguay": "paraguay",
+            "Peru": "peru",
+            "Philippines": "philippines",
+            "Poland": "poland",
+            "Portugal": "portugal",
+            "Qatar": "qatar",
+            "Romania": "romania",
+            "Russia": "russia",
+            "Rwanda": "rwanda",
+            "Saint_Kitts_and_Nevis": "st_kitts_and_nevis",
+            "Saint_Lucia": "st_lucia",
+            "Saint_Vincent_and_the_Grenadines": "st_vincent_and_the_grenadines",
+            "Samoa": "samoa",
+            "San_Marino": "san_marino",
+            "Sao_Tome_and_Principe": "sao_tome_and_principe",
+            "Saudi_Arabia": "saudi_arabia",
+            "Senegal": "senegal",
+            "Serbia": "serbia",
+            "Seychelles": "seychelles",
+            "Sierra_Leone": "sierra_leone",
+            "Singapore": "singapore",
+            "Slovakia": "slovakia",
+            "Slovenia": "slovenia",
+            "Solomon_Islands": "solomon_islands",
+            "Somalia": "somalia",
+            "South_Africa": "south_africa",
+            "South_Korea": "south_korea",
+            "South_Sudan": "south_sudan",
+            "Spain": "spain",
+            "Sri_Lanka": "sri_lanka",
+            "Sudan": "sudan",
+            "Suriname": "suriname",
+            "Swaziland": "swaziland",
+            "Sweden": "sweden",
+            "Switzerland": "switzerland",
+            "Syria": "syria",
+            "Taiwan": "taiwan",
+            "Tajikistan": "tajikistan",
+            "Tanzania": "tanzania",
+            "Thailand": "thailand",
+            "Timor-Leste": "timor_leste",
+            "Togo": "togo",
+            "Tonga": "tonga",
+            "Trinidad_and_Tobago": "trinidad_and_tobago",
+            "Tunisia": "tunisia",
+            "Turkey": "turkey",
+            "Turkmenistan": "turkmenistan",
+            "Tuvalu": "tuvalu",
+            "Uganda": "uganda",
+            "Ukraine": "ukraine",
+            "United_Arab_Emirates": "united_arab_emirates",
+            "United_Kingdom": "uk",
+            "United_States_of_America": "usa",
+            "Uruguay": "uruguay",
+            "Uzbekistan": "uzbekistan",
+            "Vanuatu": "vanuatu",
+            "Vatican_City": "vatican",
+            "Venezuela": "venezuela",
+            "Vietnam": "vietnam",
+            "Yemen": "yemen",
+            "Zambia": "zambia",
+          }
+
+          const sensitivityMapping = {
+            "Pending_classification": "to_be_clarified_490b359",
+            "Sensitive": "sensitive_7ccb825",
+            "Non_sensitive": "non_sensitive_808ff8e"
+          };
+
+          const riskLevelMapping = {
+            "Pending_classification": "to_be_clarified_9fa1db9",
+            "Very_urgent": "high",
+            "Urgent": "medium",
+            "Not_urgent": "low"
+          };
+
+          const ageRangeMapping = {
+            "5_9yrs": "0_17_years_old_a619c9b",
+            "10_14yrs": "18_59_years_old_b6fd344",
+            "15_18yrs": "not_indicated_4f3457b",
+            "19_25yrs": "19_25_years_old_4d4ddce",
+            "26_59yrs": "26_59_years_old_04359cb",
+            "60_above_yrs": "60_and_above_b0f9d41"
+          };
+
+          const caseCategoryMapping = {
+            "pending_categorization": "_pending_categorization__f2609f3",
+            "request_info_1": "request_or_suggestion_debcecd",
+            "request_info_2": "request_for_information___about_response_actors_be74193",
+            "request_info_3": "request_for_information___about_information_provision_and_feedback_channels_35e1766",
+            "request_info_4": "request_for_information___other_cec52c2",
+            "request_assistance_1": "report_8751b89",
+            "request_assistance_2": "request_for_assistance_or_services___civil_registration_and_legal_documentation_efc993f",
+            "request_assistance_3": "request_for_assistance_or_services___other_9639ea2",
+            "complaint_assist_activities_1": "observation__perception_or_belief_0230bfc",
+            "complaint_assist_activities_2": "complaint_about_assistance_and_activities___issues_with_the_activities_or_assistance_services_provided__5b0d1fd",
+            "complaint_assist_activities_3": "complaint_about_assistance_and_activities___issues_with_aid_items_11715aa",
+            "complaint_assist_activities_4": "complaint_about_assistance_and_activities___other_c3d4da3",
+            "complaint_behavior_1": "other_61db39d",
+            "complaint_behavior_2": "complaint_about_the_behavior_of_aid_workers___allegation_of_child_marriage__similar_union_with_a_child_or_sexual_activity_with_a_child_7b260a2",
+            "complaint_behavior_3": "complaint_about_the_behavior_of_aid_workers___allegation_of_harmful_practices_a7bc0bc",
+            "complaint_behavior_4": "complaint_about_the_behavior_of_aid_workers___allegation_of_slave_forced_exploitative_labour_and_or_human_trafficking_c9bbb82",
+            "complaint_behavior_5": "complaint_about_the_behavior_of_aid_workers___allegation_of_corruption__bribery__theft_or_fraud_a5a9862",
+            "complaint_behavior_6": "complaint_about_the_behavior_of_aid_workers___allegation_of_negligence_on_professional_or_personal_capacity_cac54d9",
+            "complaint_behavior_7": "complaint_about_the_behavior_of_aid_workers___allegation_of_physical_violence_or_verbal_abuse_d2854bf",
+            "complaint_behavior_8": "complaint_about_the_behavior_of_aid_workers___allegation_of_harassment__including_sexual_harassment___a354c46",
+            "complaint_behavior_9": "complaint_about_the_behavior_of_aid_workers___allegation_of_breach_of_duties_of_independence__neutrality__and_impartiality_7ef6b4b",
+            "complaint_behavior_10": "complaint_about_the_behavior_of_aid_workers___allegation_of_less_serious_safeguarding_concerns_22ffb8a",
+            "complaint_behavior_11": "complaint_about_the_behavior_of_aid_workers___allegation_of_unethical_evidence_activities_2521f33",
+            "safety_security_1": "report_on_safety_or_security_issue_0ec19e4",
+            "safety_security_2": "safety_and_security___missing_person_reports_991cd84",
+            "safety_security_3": "safety_and_security___occupational_health_and_safety_incidents_a44e245",
+            "safety_security_4": "safety_and_security___environmental_and_social_violations_and_incidents_fb29146",
+            "safety_security_5": "safety_and_security___security_incidents_3693bfa",
+            "safety_security_6": "safety_and_security___diversion_of_aid__dc68a2a",
+            "safety_security_7": "safety_and_security___politicization_of_aid_aec953e",
+            "safety_security_8": "safety_and_security___data_breaches_and_information_security_incidents_3da9b20",
+            "safety_security_9": "safety_and_security___other_b4fa79a",
+            "observations_suggestions_1": "observation_or_suggestion_aa54ec9",
+            "observations_suggestions_2": "observations_and_suggestions___about_access_to_information_and_assistance_bc7a83b",
+            "observations_suggestions_3": "observations_and_suggestions___about_community_beliefs_and_rumours_a6def10",
+            "observations_suggestions_4": "observations_and_suggestions___other_773c9d9",
+            "data_subject_request_1": "data_subject_request_bed8a87",
+            "data_subject_request_2": "data_subject_request___information_about_the_personal_data_processing_1fd7b69",
+            "data_subject_request_3": "data_subject_request___copy_of_own_personal_data_38d808c",
+            "data_subject_request_4": "data_subject_request___delete_personal_data__partial_or_total___88c6d9a",
+            "data_subject_request_5": "data_subject_request___correct_update_personal_data_260c6c9",
+            "data_subject_request_6": "data_subject_request___limit_the_processing_of_personal_data_29b9a14",
+            "data_subject_request_7": "data_subject_request___human_review_of_automated_decision_making_7182a3a",
+            "issue_cfrm_1": "issue_interacting_with_the_cfrm_08dab07",
+            "issue_cfrm_2": "data_subject_request____63f5862",
+            "issue_cfrm_3": "issue_interacting_with_the_cfrm___abusive_malicious_feedback_providers_2c2ab65",
+            "issue_cfrm_4": "issue_interacting_with_the_cfrm___cancelled_submissions_8fafbaa",
+            "issue_cfrm_5": "issue_interacting_with_the_cfrm___other_f662a8e"
+          };
+
+          const programmaticAreaMapping = {
+            "Pending_categorization": "local_integration_4721a6c",
+            "Not_applicable": "sexual_exploitation_and_abuse__sea__c2b098e",
+            "Adolescent_Development_and_Participation": "a__adolescent_development_and_participation_b19f2ba",
+            "Access_and_Logistics": "logistics_f1ce006",
+            "Camp_Coordination_and_Camp_Management": "camp_coordination_and_camp_management__cccm__e9d90b3",
+            "Cash_Assistance_and_Social_Protection": "cash_assistance_086f72b",
+            "Civil-Military_Coordination": "civil_military_coordination_87b1aca",
+            "Child_Protection": "child_protection_72b4d71",
+            "Disability_and_Inclusion": "disability_and_inclusion_e537ca8",
+            "Early_Childhood_Development": "early_childhood_development_2c517c5",
+            "Education": "education_d3bfe8f",
+            "Early_Recovery": "early_recovery_c6e511c",
+            "Emergency_Telecommunications": "emergency_telecommunications_ee553b2",
+            "Energy_and_Environment": "energy_and_environment_fd73e2b",
+            "Food_Security_and_Livelihoods": "food_security_0e10495",
+            "Gender_Based_Violence": "gender_based_violence__gbv__781a991",
+            "Health_and_Immunisation": "health_ee4020e",
+            "Housing,_Land_and_Property": "housing__land_and_property_109da85",
+            "Mental_Health_and_Psychosocial_Support": "mental_health_and_psychosocial_support__mhpss__abac8de",
+            "Migrants": "migrants__registration__resettlement__rsd__repatriation__local_integration__complementary_pathways__etc___aa10d1b",
+            "Mine_Action": "mine_action_f5161ba",
+            "Nutrition": "nutrition_03abf98",
+            "Parenting": "parenting_84b0c4c",
+            "Protection": "protection_0e30687",
+            "Shelter": "shelter_ae9eb74",
+            "Social_and_Behaviour_Change": "social_and_behaviour_change__sbc__b64e02a",
+            "WASH": "wash_d59fd40"
+          };
+
+          //Perform input data mapping
+          state.mappedData = {
+              sex: genderMapping[state.data.sex],
+              age_range_3df3bdb: ageRangeMapping[state.data.age],
+              case_category_80a3d81: caseCategoryMapping[state.data.case_category_80a3d81],
+              programmatic_area_26ac9e6: programmaticAreaMapping[state.data.programmatic_area_26ac9e6],
+              risk_level: riskLevelMapping[state.data.risk_level],
+              sensitivity_c758743: sensitivityMapping[state.data.sensitivity_c758743],
+              nationality: [nationalityMapping[state.data.nationality]]
+            }
+
+            return state;
+
+          });
       Register-feedback-in-Primero:
         name: Register feedback in Primero
         adaptor: '@openfn/language-primero@latest'
-        credential: null
+        credential: rediet@openfn.org-Unicare-BIH-Primero-Demo
         body: |
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
-
+          //Create case to be sent to primero
+          createCase({
+            data: {
+              registration_date: state.data.registration_date,
+              location_current: "BIH", //TO BE MODIFIED
+              feedback_comment_f076498: state.data.feedback_comment_f076498,
+              sex: state.mappedData.sex,
+              name_first: state.data.name_first,
+              name_last: state.data.name_last,
+              age_range_3df3bdb: state.mappedData.age_range_3df3bdb,
+              disclosure_other_orgs: true, //TO BE MODIFIED
+              date_of_birth: state.data.date_of_birth,
+              nationality: state.mappedData.nationality,
+              preferred_channel_of_communication_f25a28d: state.data.preferred_channel_of_communication_f25a28d.replace(/_+/g, ' ').trim(), //CHECK IF NOT NULL
+              case_category_80a3d81: state.mappedData.case_category_80a3d81,
+              programmatic_area_26ac9e6: state.mappedData.programmatic_area_26ac9e6,
+              risk_level: state.mappedData.risk_level,
+              sensitivity_c758743: state.mappedData.sensitivity_c758743,
+              module_id: "primeromodule-cp",
+            },
+          });
     triggers:
       webhook:
         type: webhook
-        enabled: false
+        enabled: true
     edges:
-      webhook->Map-data:
+      webhook->Transform-and-Map-data:
         source_trigger: webhook
-        target_job: Map-data
+        target_job: Transform-and-Map-data
         condition_type: always
         enabled: true
-      Map-data->Register-feedback-in-Primero:
-        source_job: Map-data
+      Transform-and-Map-data->Register-feedback-in-Primero:
+        source_job: Transform-and-Map-data
         target_job: Register-feedback-in-Primero
         condition_type: on_job_success
         enabled: true
