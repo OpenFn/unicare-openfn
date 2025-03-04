@@ -326,6 +326,20 @@ workflows:
             "WASH": "wash_d59fd40"
           };
 
+          const formatPreferredChannelOfCommunication = (text) => {
+            if (text === null || text === undefined) {
+              return '';
+            }
+            return text.replace(/_/g, ' ');
+          };
+
+          const checkDisclosure = (disclosure) => {
+            if (disclosure) {
+              return disclosure === "OK";
+            }
+            return false;
+          };
+
           //Perform input data mapping
           state.mappedData = {
               sex: genderMapping[state.data.sex],
@@ -334,7 +348,9 @@ workflows:
               programmatic_area_26ac9e6: programmaticAreaMapping[state.data.programmatic_area_26ac9e6],
               risk_level: riskLevelMapping[state.data.risk_level],
               sensitivity_c758743: sensitivityMapping[state.data.sensitivity_c758743],
-              nationality: [nationalityMapping[state.data.nationality]]
+              nationality: [nationalityMapping[state.data.nationality]],
+              preferred_channel_of_communication_f25a28d: formatPreferredChannelOfCommunication(state.data.preferred_channel_of_communication_f25a28d),
+              disclosure_other_orgs: checkDisclosure(state.data.disclosure_other_orgs)
             }
 
             return state;
@@ -355,10 +371,10 @@ workflows:
               name_first: state.data.name_first,
               name_last: state.data.name_last,
               age_range_3df3bdb: state.mappedData.age_range_3df3bdb,
-              disclosure_other_orgs: true, //TO BE MODIFIED
+              disclosure_other_orgs: state.mappedData.disclosure_other_orgs, 
               date_of_birth: state.data.date_of_birth,
               nationality: state.mappedData.nationality,
-              preferred_channel_of_communication_f25a28d: state.data.preferred_channel_of_communication_f25a28d.replace(/_+/g, ' ').trim(), //CHECK IF NOT NULL
+              preferred_channel_of_communication_f25a28d: state.mappedData.preferred_channel_of_communication_f25a28d, 
               case_category_80a3d81: state.mappedData.case_category_80a3d81,
               programmatic_area_26ac9e6: state.mappedData.programmatic_area_26ac9e6,
               risk_level: state.mappedData.risk_level,
