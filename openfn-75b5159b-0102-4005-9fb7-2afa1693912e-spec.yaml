@@ -355,11 +355,11 @@ workflows:
             };
 
             const consentFromMapping = {
-              "Individual": "child",
-              "Caregiver": "caregiver",
-              "Social_worker": "other",
-              "Teacher": "teacher_627163",
-              "Other": "other_197861"
+              "Individual": "individual__self_reporting__e45b925",
+              "Caregiver": "caregiver__legal_guardian__4df2a59",
+              "Social_worker": "social_worker_0cd94f9",
+              "Teacher": "teacher_99ba24d",
+              "Other": "other_5b3b632"
             };
 
             const formatPreferredChannelOfCommunication = (text) => {
@@ -398,7 +398,10 @@ workflows:
               preferred_channel_of_communication_f25a28d: formatPreferredChannelOfCommunication(state.data.preferred_channel_of_communication),
               disclosure_other_orgs: checkDisclosure(state.data.disclosure_other_orgs),
               language: [languageMapping[state.data.language]],
-              interview_subject: consentFromMapping[state.data.consent]
+              consent_assent_obtained_from_c4a5c9e: (state.data.consent || "")
+                .split(" ")
+                .map(factor => consentFromMapping[factor])
+                .filter(Boolean)
             }
 
             return state;
@@ -429,7 +432,7 @@ workflows:
               email_b3fb5e0: state.data.channel_of_communication_email,
               address_current: state.data.channel_of_communication_physical_address,
               language: state.mappedData.language,
-              interview_subject: state.mappedData.interview_subject,
+              consent_assent_obtained_from_c4a5c9e: state.mappedData.consent_assent_obtained_from_c4a5c9e,
               consent_source_other: state.data.consent_other,
               immediate_actions_taken_in_response_to_the_feedback_received_ecd46ba: state.data.immediate_actions,
               other_language_of_interaction_00ed07f: state.data.language_comment,
