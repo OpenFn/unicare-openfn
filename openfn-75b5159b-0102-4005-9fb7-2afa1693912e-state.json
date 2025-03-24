@@ -5,7 +5,6 @@
   "concurrency": null,
   "inserted_at": "2025-02-28T09:01:31Z",
   "updated_at": "2025-03-04T13:23:58Z",
-  "scheduled_deletion": null,
   "project_credentials": {
     "rediet@openfn.org-Unicare-BIH-Primero-Demo": {
       "id": "687e2087-42c2-4e7c-996d-c6baa3bc40ab",
@@ -13,11 +12,11 @@
       "owner": "rediet@openfn.org"
     }
   },
+  "scheduled_deletion": null,
   "history_retention_period": 7,
   "dataclip_retention_period": null,
   "retention_policy": "retain_all",
   "collections": {},
-  "requires_mfa": false,
   "workflows": {
     "inform-to-unicare": {
       "id": "020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b",
@@ -64,5 +63,6 @@
         }
       }
     }
-  }
+  },
+  "requires_mfa": false
 }
