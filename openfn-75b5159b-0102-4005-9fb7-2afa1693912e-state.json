@@ -21,41 +21,15 @@
     "inform-to-unicare": {
       "id": "020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b",
       "name": "inform-to-unicare",
-      "edges": {
-        "webhook->Transform-and-Map-data": {
+      "inserted_at": "2025-03-25T07:14:44.136011Z",
+      "lock_version": 43,
+      "triggers": {
+        "webhook": {
           "enabled": true,
-          "id": "bb8a1c2e-9a1f-4f30-8415-b1761836d242",
-          "target_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
-          "source_trigger_id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
-          "condition_type": "always"
-        },
-        "Transform-and-Map-data->Register-feedback-in-Primero": {
-          "enabled": true,
-          "id": "3ed49713-a283-4186-809b-c18f067f7291",
-          "target_job_id": "e9638134-ed2e-4bdc-848f-78b0e093983f",
-          "source_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
-          "condition_type": "on_job_success"
-        },
-        "Register-feedback-in-Primero->Get-Attachment-From-Inform": {
-          "enabled": true,
-          "id": "62f67279-4e4d-4822-8a07-6b9c1d10c3c9",
-          "target_job_id": "f442a28e-6efb-49e9-87aa-b91796a52a4e",
-          "source_job_id": "e9638134-ed2e-4bdc-848f-78b0e093983f",
-          "condition_type": "js_expression",
-          "condition_label": "Attachment Exists",
-          "condition_expression": "data.case_id && data._attachments?.length > 0\n"
-        },
-        "Get-Attachment-From-Inform->Upload-Attachment-to-Primero": {
-          "enabled": true,
-          "id": "0f9cf8ac-edfc-4c36-8dbb-860456a047d4",
-          "target_job_id": "46fa271d-2124-4a95-8b79-233392bd0a5a",
-          "source_job_id": "f442a28e-6efb-49e9-87aa-b91796a52a4e",
-          "condition_type": "on_job_success"
+          "id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
+          "type": "webhook"
         }
       },
-      "concurrency": null,
-      "inserted_at": "2025-03-02T18:53:04Z",
-      "updated_at": "2025-03-24T09:33:40Z",
       "jobs": {
         "Transform-and-Map-data": {
           "id": "76c60756-dd0a-4d96-8070-31a6191449cc",
@@ -70,31 +44,24 @@
           "body": "//Create case to be sent to primero\ncreateCase({\n  data: {\n    registration_date: state.mappedData.registration_date,\n    location_current: state.mappedData.location_current, \n    feedback_comment_f076498: state.data.feedback_comment,\n    sex: state.mappedData.sex,\n    name_first: state.data.name_first,\n    name_last: state.data.name_last,\n    age_range_3df3bdb: state.mappedData.age_range_3df3bdb,\n    disclosure_other_orgs: state.mappedData.disclosure_other_orgs, \n    date_of_birth: state.data.date_of_birth,\n    nationality: state.mappedData.nationality,\n    preferred_channel_of_communication_f25a28d: state.mappedData.preferred_channel_of_communication_f25a28d, \n    case_category_80a3d81: state.mappedData.case_category_80a3d81,\n    programmatic_area_26ac9e6: state.mappedData.programmatic_area_26ac9e6,\n    telephone_current: state.data.channel_of_communication_phonenumber,\n    email_b3fb5e0: state.data.channel_of_communication_email,\n    address_current: state.data.channel_of_communication_physical_address,\n    language: state.mappedData.language,\n    consent_assent_obtained_from_c4a5c9e: state.mappedData.consent_assent_obtained_from_c4a5c9e,\n    consent_source_other: state.data.consent_other,\n    immediate_actions_taken_in_response_to_the_feedback_received_ecd46ba: state.data.immediate_actions,\n    other_language_of_interaction_00ed07f: state.data.language_comment,\n    diversity_factor_s__98eb91b: state.mappedData.diversity_factor_s__98eb91b,\n    feedback_channel_eba5764: 'mobile_teams__field_staff__monitors_afdfc51',\n    module_id: \"primeromodule-cp\",\n  },\n});\n",
           "adaptor": "@openfn/language-primero@latest",
           "project_credential_id": "687e2087-42c2-4e7c-996d-c6baa3bc40ab"
-        },
-        "Get-Attachment-From-Inform": {
-          "id": "f442a28e-6efb-49e9-87aa-b91796a52a4e",
-          "name": "Get Attachment From Inform",
-          "body": "// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\n",
-          "adaptor": "@openfn/language-http@latest",
-          "project_credential_id": null
-        },
-        "Upload-Attachment-to-Primero": {
-          "id": "46fa271d-2124-4a95-8b79-233392bd0a5a",
-          "name": "Upload Attachment to Primero",
-          "body": "// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\n",
-          "adaptor": "@openfn/language-primero@latest",
-          "project_credential_id": null
         }
       },
-      "triggers": {
-        "webhook": {
+      "edges": {
+        "webhook->Transform-and-Map-data": {
           "enabled": true,
-          "id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
-          "type": "webhook"
+          "id": "bb8a1c2e-9a1f-4f30-8415-b1761836d242",
+          "target_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
+          "source_trigger_id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
+          "condition_type": "always"
+        },
+        "Transform-and-Map-data->Register-feedback-in-Primero": {
+          "enabled": true,
+          "id": "3ed49713-a283-4186-809b-c18f067f7291",
+          "target_job_id": "e9638134-ed2e-4bdc-848f-78b0e093983f",
+          "source_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
+          "condition_type": "on_job_success"
         }
-      },
-      "deleted_at": null,
-      "lock_version": 42
+      }
     }
   },
   "requires_mfa": false

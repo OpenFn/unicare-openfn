@@ -407,6 +407,7 @@ workflows:
             return state;
 
           });
+
       Register-feedback-in-Primero:
         name: Register feedback in Primero
         adaptor: '@openfn/language-primero@latest'
@@ -441,21 +442,6 @@ workflows:
               module_id: "primeromodule-cp",
             },
           });
-      Get-Attachment-From-Inform:
-        name: Get Attachment From Inform
-        adaptor: '@openfn/language-http@latest'
-        credential: null
-        body: |
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
-
-      Upload-Attachment-to-Primero:
-        name: Upload Attachment to Primero
-        adaptor: '@openfn/language-primero@latest'
-        credential: null
-        body: |
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
 
     triggers:
       webhook:
@@ -470,18 +456,5 @@ workflows:
       Transform-and-Map-data->Register-feedback-in-Primero:
         source_job: Transform-and-Map-data
         target_job: Register-feedback-in-Primero
-        condition_type: on_job_success
-        enabled: true
-      Register-feedback-in-Primero->Get-Attachment-From-Inform:
-        source_job: Register-feedback-in-Primero
-        target_job: Get-Attachment-From-Inform
-        condition_type: js_expression
-        condition_label: Attachment Exists
-        condition_expression: |
-          data.case_id && data._attachments?.length > 0
-        enabled: true
-      Get-Attachment-From-Inform->Upload-Attachment-to-Primero:
-        source_job: Get-Attachment-From-Inform
-        target_job: Upload-Attachment-to-Primero
         condition_type: on_job_success
         enabled: true
