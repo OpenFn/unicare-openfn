@@ -19,7 +19,8 @@ The implemented workflow in Bosnia and Herzegovina is designed to be adaptable t
 **Workflow diagram**
 
 _Refer to the diagram below for an overview of the data flow from Inform to OpenFn to UNICARE._
-![UNICARE BIH](https://github.com/user-attachments/assets/85e6b109-4bea-496f-af43-a4821bcffd64)
+![UNICARE BIH](https://github.com/user-attachments/assets/b3e5061b-b0f8-4a59-8f3d-2912be05bc16)
+
 
 ## 3. System Integrations
 
@@ -58,6 +59,7 @@ Submission data from Inform is transformed to match Primero's required case stru
 
 - Full mapping documentation is available here: [Mapping Specification](https://docs.google.com/spreadsheets/d/1d0IXdaI3yrvOUHdr0a6hGmUX6dhLLyK6pr8STrgcsDA/edit#gid=1275153608)
 - Submissions are collected using the following form:  [BiH Face-to-Face Feedback Training Form](https://web.inform.unicef.org/x/KblafkQ1)
+- Project workspace and job logic can be found in the OpenFn implementation:  [OpenFn Project Workspace](https://app.openfn.org/projects/75b5159b-0102-4005-9fb7-2afa1693912e/w/020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b?a=6fab331e-4f6a-4167-9219-c7ce28bbcf2d&s=46fa271d-2124-4a95-8b79-233392bd0a5a)
 
 **Static metadata mappings**
 
@@ -68,8 +70,6 @@ module_id: 'primeromodule-cp'
 ```
 
 These values are based on the current UNICARE configuration. Any changes to metadata in Primero must be reflected in the OpenFn configuration.
-
-Project workspace and job logic can be found in the OpenFn implementation:  [OpenFn Project Workspace](https://app.openfn.org/projects/75b5159b-0102-4005-9fb7-2afa1693912e/w/020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b?a=6fab331e-4f6a-4167-9219-c7ce28bbcf2d&s=46fa271d-2124-4a95-8b79-233392bd0a5a)
 
 ## 6. Solution Assumptions
 
