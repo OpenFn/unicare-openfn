@@ -906,22 +906,73 @@ workflows:
       Get-attachment-From-Inform:
         name: Get attachment From Inform
         adaptor: '@openfn/language-http@latest'
-        credential: hunter@openfn.org-Inform-HTTP
+        credential: null
         body: |
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
-
-          get($.attachments[0].download_url, {
-          maxRedirections: 0
+          
+          fn(state =>{
+            state.primeroCaseId = state.data.id;
+            return state
           })
+          get(`https://data.inform.unicef.org${$.attachments[0].download_url}`, {
+            maxRedirections: 0
+          })
+
+          get($.response.headers.location, {
+            parseAs: 'stream'
+          }).then(async (state) => {
+            const attachments = state.attachments[0]
+            const text = await state.data.text()
+            const imageBase64 = util.encode(text, { parseJson: false });
+            state.imageData = {
+              attachment: imageBase64,
+              attachment_type: "image",
+              content_type: attachments.mimetype,
+              date: new Date().toISOString(),
+              field_name: "photos",
+              file_name: attachments.name,
+              is_current: false
+            };
+            return state;
+          })
+
+          // function encodeimage(state) {
+          //   return new Promise((resolve, reject) => {
+          //     const attachments = state.attachments[0]
+          //     let rawData = '';
+          //     state.data.on('data', chunk => {
+          //       rawData += chunk.toString('binary');
+          //     });
+          //     state.data.on('end', () => {
+          //       const base64String = util.encode(rawData, { parseJson: false });
+          //       delete state.data
+          //       const imageData = {
+          //       attachment: base64String,
+          //       attachment_type: "image",
+          //       content_type: attachments.mimetype,
+          //       date: "2025-03-21T07:46:35.708Z",
+          //       field_name: "photos",
+          //       file_name: "download (1).png",
+          //       is_current: false
+          //     };
+          //       resolve({ ...state, imageBase64: base64String });
+          //     });
+          //     state.data.on('error', reject);
+          //   });
+          // }
+
+          // fn(state => {
+
+          //   return encodeimage(state)
+
+          // })
       Upload-attachment-to-Primero:
         name: Upload attachment to Primero
         adaptor: '@openfn/language-primero@latest'
         credential: rediet@openfn.org-Unicare-BIH-Primero-Demo
         body: |
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+          
 
+          http.post(`cases/${$.primeroCaseId}/attachments`,$.imageData);
     triggers:
       webhook:
         type: webhook
@@ -944,6 +995,7 @@ workflows:
         condition_label: Attachment Exists
         condition_expression: |
           state.data.id && state.attachments && state.attachments?.length > 0
+
         enabled: true
       Get-attachment-From-Inform->Upload-attachment-to-Primero:
         source_job: Get-attachment-From-Inform
