@@ -5,6 +5,9 @@ credentials:
   hunter@openfn.org-Inform-HTTP:
     name: Inform HTTP
     owner: hunter@openfn.org
+  hunter@openfn.org-Primero-Unicare-test:
+    name: Primero Unicare test
+    owner: hunter@openfn.org
   rediet@openfn.org-Unicare-BIH-Primero-Demo:
     name: Unicare BIH Primero Demo
     owner: rediet@openfn.org
@@ -14,7 +17,7 @@ workflows:
     jobs:
       Transform-and-Map-data:
         name: Transform and Map data
-        adaptor: '@openfn/language-common@latest'
+        adaptor: '@openfn/language-common@2.3.1'
         credential: null
         body: |
           fn(state => {
@@ -413,7 +416,7 @@ workflows:
 
       Register-feedback-in-Primero:
         name: Register feedback in Primero
-        adaptor: '@openfn/language-primero@latest'
+        adaptor: '@openfn/language-primero@3.1.0'
         credential: rediet@openfn.org-Unicare-BIH-Primero-Demo
         body: |
           //Create case to be sent to primero
@@ -466,7 +469,7 @@ workflows:
     jobs:
       Transform-and-Map-data:
         name: Transform and Map data
-        adaptor: '@openfn/language-common@latest'
+        adaptor: '@openfn/language-common@2.3.1'
         credential: null
         body: |
           fn(state => {
@@ -865,7 +868,7 @@ workflows:
 
       Register-feedback-in-Primero:
         name: Register feedback in Primero
-        adaptor: '@openfn/language-primero@latest'
+        adaptor: '@openfn/language-primero@3.1.0'
         credential: rediet@openfn.org-Unicare-BIH-Primero-Demo
         body: |
           //Create case to be sent to primero
@@ -905,7 +908,7 @@ workflows:
 
       Get-attachment-From-Inform:
         name: Get attachment From Inform
-        adaptor: '@openfn/language-http@latest'
+        adaptor: '@openfn/language-http@7.0.5'
         credential: null
         body: |
           
@@ -918,13 +921,14 @@ workflows:
           })
 
           get($.response.headers.location, {
-            parseAs: 'stream'
+            parseAs: 'base64'
           }).then(async (state) => {
-            const attachments = state.attachments[0]
-            const text = await state.data.text()
-            const imageBase64 = util.encode(text, { parseJson: false });
-            state.imageData = {
-              attachment: imageBase64,
+             const attachments = state.attachments[0];
+             const imageEncodedString = state.data
+
+                delete state.data
+              state.imageData = {
+              attachment: imageEncodedString,
               attachment_type: "image",
               content_type: attachments.mimetype,
               date: new Date().toISOString(),
@@ -932,33 +936,12 @@ workflows:
               file_name: attachments.name,
               is_current: false
             };
-            return state;
+              
+          return state
+            
           })
 
-          // function encodeimage(state) {
-          //   return new Promise((resolve, reject) => {
-          //     const attachments = state.attachments[0]
-          //     let rawData = '';
-          //     state.data.on('data', chunk => {
-          //       rawData += chunk.toString('binary');
-          //     });
-          //     state.data.on('end', () => {
-          //       const base64String = util.encode(rawData, { parseJson: false });
-          //       delete state.data
-          //       const imageData = {
-          //       attachment: base64String,
-          //       attachment_type: "image",
-          //       content_type: attachments.mimetype,
-          //       date: "2025-03-21T07:46:35.708Z",
-          //       field_name: "photos",
-          //       file_name: "download (1).png",
-          //       is_current: false
-          //     };
-          //       resolve({ ...state, imageBase64: base64String });
-          //     });
-          //     state.data.on('error', reject);
-          //   });
-          // }
+
 
           // fn(state => {
 
@@ -967,12 +950,13 @@ workflows:
           // })
       Upload-attachment-to-Primero:
         name: Upload attachment to Primero
-        adaptor: '@openfn/language-primero@latest'
+        adaptor: '@openfn/language-primero@3.1.0'
         credential: rediet@openfn.org-Unicare-BIH-Primero-Demo
         body: |
           
 
-          http.post(`cases/${$.primeroCaseId}/attachments`,$.imageData);
+          http.post(`cases/${$.primeroCaseId}/attachments`, $.imageData)
+
     triggers:
       webhook:
         type: webhook
