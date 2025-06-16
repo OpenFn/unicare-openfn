@@ -466,7 +466,7 @@ workflows:
         target_job: Register-feedback-in-Primero
         condition_type: on_job_success
         enabled: true
-  informto-unicare-with-attachment:
+  inform-to-unicare-with-attachment:
     name: informto-unicare-with-attachment
     jobs:
       Transform-and-Map-data:
