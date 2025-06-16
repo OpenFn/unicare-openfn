@@ -467,7 +467,7 @@ workflows:
         condition_type: on_job_success
         enabled: true
   inform-to-unicare-with-attachment:
-    name: informto-unicare-with-attachment
+    name: inform-to-unicare-with-attachment
     jobs:
       Transform-and-Map-data:
         name: Transform and Map data
