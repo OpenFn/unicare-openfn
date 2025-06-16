@@ -4,7 +4,7 @@
   "description": null,
   "concurrency": null,
   "inserted_at": "2025-02-28T09:01:31Z",
-  "updated_at": "2025-04-28T09:26:36Z",
+  "updated_at": "2025-06-16T08:44:39Z",
   "project_credentials": {
     "rediet@openfn.org-Unicare-BIH-Primero-Demo": {
       "id": "687e2087-42c2-4e7c-996d-c6baa3bc40ab",
@@ -26,21 +26,30 @@
   "history_retention_period": 7,
   "dataclip_retention_period": null,
   "retention_policy": "retain_all",
-  "allow_support_access": false,
   "collections": {},
   "workflows": {
     "inform-to-unicare": {
       "id": "020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b",
       "name": "inform-to-unicare",
-      "inserted_at": "2025-04-28T10:52:53.087565Z",
-      "lock_version": 61,
-      "triggers": {
-        "webhook": {
+      "edges": {
+        "webhook->Transform-and-Map-data": {
           "enabled": true,
-          "id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
-          "type": "webhook"
+          "id": "bb8a1c2e-9a1f-4f30-8415-b1761836d242",
+          "target_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
+          "source_trigger_id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
+          "condition_type": "always"
+        },
+        "Transform-and-Map-data->Register-feedback-in-Primero": {
+          "enabled": true,
+          "id": "3ed49713-a283-4186-809b-c18f067f7291",
+          "target_job_id": "e9638134-ed2e-4bdc-848f-78b0e093983f",
+          "source_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
+          "condition_type": "on_job_success"
         }
       },
+      "concurrency": null,
+      "inserted_at": "2025-03-02T18:53:04Z",
+      "updated_at": "2025-04-28T10:52:53Z",
       "jobs": {
         "Transform-and-Map-data": {
           "id": "76c60756-dd0a-4d96-8070-31a6191449cc",
@@ -57,23 +66,95 @@
           "project_credential_id": "687e2087-42c2-4e7c-996d-c6baa3bc40ab"
         }
       },
+      "triggers": {
+        "webhook": {
+          "enabled": true,
+          "id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
+          "type": "webhook"
+        }
+      },
+      "deleted_at": null,
+      "lock_version": 61
+    },
+    "inform-to-unicare-with-attachment": {
+      "id": "b59c62a3-7edd-4a02-8910-56c84a8ae388",
+      "name": "inform-to-unicare-with-attachment",
       "edges": {
         "webhook->Transform-and-Map-data": {
           "enabled": true,
-          "id": "bb8a1c2e-9a1f-4f30-8415-b1761836d242",
-          "target_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
-          "source_trigger_id": "f23282f8-485a-4ed4-8b94-3b39aa2f28c3",
+          "id": "9fe50b36-b886-4367-87ff-eca33e490eca",
+          "target_job_id": "58bfe079-adc5-4431-9cc2-7a8356c7dace",
+          "source_trigger_id": "a1a27418-4575-4562-8b2c-65e017a5c46e",
           "condition_type": "always"
         },
         "Transform-and-Map-data->Register-feedback-in-Primero": {
           "enabled": true,
-          "id": "3ed49713-a283-4186-809b-c18f067f7291",
-          "target_job_id": "e9638134-ed2e-4bdc-848f-78b0e093983f",
-          "source_job_id": "76c60756-dd0a-4d96-8070-31a6191449cc",
+          "id": "089eaf07-b281-4ccd-9ab1-fd9612c4be04",
+          "target_job_id": "80961572-59e0-4992-bc0f-3707dbddfbd7",
+          "source_job_id": "58bfe079-adc5-4431-9cc2-7a8356c7dace",
+          "condition_type": "on_job_success"
+        },
+        "Register-feedback-in-Primero->Get-attachment-From-Inform": {
+          "enabled": true,
+          "id": "63bcb4b4-d4b8-47f7-a124-f938b27b077e",
+          "target_job_id": "8a5e416e-f1af-40b7-a295-426c50f48236",
+          "source_job_id": "80961572-59e0-4992-bc0f-3707dbddfbd7",
+          "condition_type": "js_expression",
+          "condition_label": "Attachment Exists",
+          "condition_expression": "state.data.id && state.attachments && state.attachments?.length > 0\n"
+        },
+        "Get-attachment-From-Inform->Upload-attachment-to-Primero": {
+          "enabled": true,
+          "id": "180cff33-29c4-4d93-af41-32ba53c8cd74",
+          "target_job_id": "a52fcb63-8cac-4da3-b184-72bb415d1c7f",
+          "source_job_id": "8a5e416e-f1af-40b7-a295-426c50f48236",
           "condition_type": "on_job_success"
         }
-      }
+      },
+      "concurrency": null,
+      "inserted_at": "2025-06-16T08:44:39Z",
+      "updated_at": "2025-06-16T08:44:39Z",
+      "jobs": {
+        "Transform-and-Map-data": {
+          "id": "58bfe079-adc5-4431-9cc2-7a8356c7dace",
+          "name": "Transform and Map data",
+          "body": "fn(state => {\n  console.log('Preparing and cleaning case data...');\n  //Prepare mapping constants between inform and primero\n  const genderMapping = {\n    \"Male\": \"male\",\n    \"Female\": \"female\",\n    \"Non_binary\": \"other\",\n    \"Prefer_not_to_say\": \"preferred_not_to_indicate_37248fa\",\n    \"Mixed_group_of_people\": \"mixed_group_of_people_529e88d\"\n  };\n\n  const nationalityMapping = {\n    \"Afghanistan\": \"afghanistan\",\n    \"Albania\": \"albania\",\n    \"Algeria\": \"algeria\",\n    \"Andorra\": \"andorra\",\n    \"Angola\": \"angola\",\n    \"Antigua_and_Barbuda\": \"antigua_and_barbuda\",\n    \"Argentina\": \"argentina\",\n    \"Armenia\": \"armenia\",\n    \"Australia\": \"australia\",\n    \"Austria\": \"austria\",\n    \"Azerbaijan\": \"azerbaijan\",\n    \"Bahamas\": \"bahamas\",\n    \"Bahrain\": \"bahrain\",\n    \"Bangladesh\": \"bangladesh\",\n    \"Barbados\": \"barbados\",\n    \"Belarus\": \"belarus\",\n    \"Belgium\": \"belgium\",\n    \"Belize\": \"belize\",\n    \"Benin\": \"benin\",\n    \"Bhutan\": \"bhutan\",\n    \"Bolivia\": \"bolivia\",\n    \"Bosnia_and_Herzegovina\": \"bosnia_and_herzegovina\",\n    \"Botswana\": \"botswana\",\n    \"Brazil\": \"brazil\",\n    \"Brunei\": \"brunei\",\n    \"Bulgaria\": \"bulgaria\",\n    \"Burkina Faso\": \"burkina_faso\",\n    \"Burundi\": \"burundi\",\n    \"Cabo Verde\": \"cabo_verde\",\n    \"Cambodia\": \"cambodia\",\n    \"Cameroon\": \"cameroon\",\n    \"Canada\": \"canada\",\n    \"Central_African_Republic\": \"central_african_republic\",\n    \"Chad\": \"chad\",\n    \"Chile\": \"chile\",\n    \"China\": \"china\",\n    \"Colombia\": \"colombia\",\n    \"Comoros\": \"comoros\",\n    \"Congo-Brazzaville\": \"congo\",\n    \"Democratic_Republic_of_the_Congo\": \"drc\",\n    \"Costa_Rica\": \"costa_rica\",\n    \"Cote_d'Ivoire\": \"cote_divoire\",\n    \"Croatia\": \"croatia\",\n    \"Cuba\": \"cuba\",\n    \"Cyprus\": \"cyprus\",\n    \"Czechia\": \"czech_republic\",\n    \"Denmark\": \"denmark\",\n    \"Djibouti\": \"djibouti\",\n    \"Dominica\": \"dominica\",\n    \"Dominican_Republic\": \"dominican_republic\",\n    \"Ecuador\": \"ecuador\",\n    \"Egypt\": \"egypt\",\n    \"El_Salvador\": \"el_salvador\",\n    \"Equatorial_Guinea\": \"equatorial_guinea\",\n    \"Eritrea\": \"eritrea\",\n    \"Estonia\": \"estonia\",\n    \"Ethiopia\": \"ethiopia\",\n    \"Fiji\": \"fiji\",\n    \"Finland\": \"finland\",\n    \"France\": \"france\",\n    \"Gabon\": \"gabon\",\n    \"Gambia\": \"gambia\",\n    \"Georgia\": \"georgia\",\n    \"Germany\": \"germany\",\n    \"Ghana\": \"ghana\",\n    \"Greece\": \"greece\",\n    \"Grenada\": \"grenada\",\n    \"Guatemala\": \"guatemala\",\n    \"Guinea\": \"guinea\",\n    \"Guinea_Bissau\": \"guinea_bissau\",\n    \"Guyana\": \"guyana\",\n    \"Haiti\": \"haiti\",\n    \"Honduras\": \"honduras\",\n    \"Hungary\": \"hungary\",\n    \"Iceland\": \"iceland\",\n    \"India\": \"india\",\n    \"Indonesia\": \"indonesia\",\n    \"Iran\": \"iran\",\n    \"Iraq\": \"iraq\",\n    \"Ireland\": \"ireland\",\n    \"Israel\": \"israel\",\n    \"Italy\": \"italy\",\n    \"Jamaica\": \"jamaica\",\n    \"Japan\": \"japan\",\n    \"Jordan\": \"jordan\",\n    \"Kazakhstan\": \"kazakhstan\",\n    \"Kenya\": \"kenya\",\n    \"Kiribati\": \"kiribati\",\n    \"Kosovo\": \"kosovo\",\n    \"Kuwait\": \"kuwait\",\n    \"Kyrgyzstan\": \"kyrgyzstan\",\n    \"Laos\": \"laos\",\n    \"Latvia\": \"latvia\",\n    \"Lebanon\": \"lebanon\",\n    \"Lesotho\": \"lesotho\",\n    \"Liberia\": \"liberia\",\n    \"Libya\": \"libya\",\n    \"Liechtenstein\": \"liechtenstein\",\n    \"Lithuania\": \"lithuania\",\n    \"Luxembourg\": \"luxembourg\",\n    \"Macedonia\": \"macedonia\",\n    \"Madagascar\": \"madagascar\",\n    \"Malawi\": \"malawi\",\n    \"Malaysia\": \"malaysia\",\n    \"Maldives\": \"maldives\",\n    \"Mali\": \"mali\",\n    \"Malta\": \"malta\",\n    \"Marshall_Islands\": \"marshall_islands\",\n    \"Mauritania\": \"mauritania\",\n    \"Mauritius\": \"mauritius\",\n    \"Mexico\": \"mexico\",\n    \"Micronesia\": \"micronesia\",\n    \"Moldova\": \"moldova\",\n    \"Monaco\": \"monaco\",\n    \"Mongolia\": \"mongolia\",\n    \"Montenegro\": \"montenegro\",\n    \"Morocco\": \"morocco\",\n    \"Mozambique\": \"mozambique\",\n    \"Myanmar\": \"myanmar\",\n    \"Namibia\": \"namibia\",\n    \"Nauru\": \"nauru\",\n    \"Nepal\": \"nepal\",\n    \"Netherlands\": \"netherlands\",\n    \"New_Zealand\": \"new_zealand\",\n    \"Nicaragua\": \"nicaragua\",\n    \"Niger\": \"niger\",\n    \"Nigeria\": \"nigeria\",\n    \"North_Korea\": \"north_korea\",\n    \"Norway\": \"norway\",\n    \"Oman\": \"oman\",\n    \"Pakistan\": \"pakistan\",\n    \"Palau\": \"palau\",\n    \"Palestine_State\": \"palestine\",\n    \"Panama\": \"panama\",\n    \"Papua_New_Guinea\": \"papua_new_guinea\",\n    \"Paraguay\": \"paraguay\",\n    \"Peru\": \"peru\",\n    \"Philippines\": \"philippines\",\n    \"Poland\": \"poland\",\n    \"Portugal\": \"portugal\",\n    \"Qatar\": \"qatar\",\n    \"Romania\": \"romania\",\n    \"Russia\": \"russia\",\n    \"Rwanda\": \"rwanda\",\n    \"Saint_Kitts_and_Nevis\": \"st_kitts_and_nevis\",\n    \"Saint_Lucia\": \"st_lucia\",\n    \"Saint_Vincent_and_the_Grenadines\": \"st_vincent_and_the_grenadines\",\n    \"Samoa\": \"samoa\",\n    \"San_Marino\": \"san_marino\",\n    \"Sao_Tome_and_Principe\": \"sao_tome_and_principe\",\n    \"Saudi_Arabia\": \"saudi_arabia\",\n    \"Senegal\": \"senegal\",\n    \"Serbia\": \"serbia\",\n    \"Seychelles\": \"seychelles\",\n    \"Sierra_Leone\": \"sierra_leone\",\n    \"Singapore\": \"singapore\",\n    \"Slovakia\": \"slovakia\",\n    \"Slovenia\": \"slovenia\",\n    \"Solomon_Islands\": \"solomon_islands\",\n    \"Somalia\": \"somalia\",\n    \"South_Africa\": \"south_africa\",\n    \"South_Korea\": \"south_korea\",\n    \"South_Sudan\": \"south_sudan\",\n    \"Spain\": \"spain\",\n    \"Sri_Lanka\": \"sri_lanka\",\n    \"Sudan\": \"sudan\",\n    \"Suriname\": \"suriname\",\n    \"Swaziland\": \"swaziland\",\n    \"Sweden\": \"sweden\",\n    \"Switzerland\": \"switzerland\",\n    \"Syria\": \"syria\",\n    \"Taiwan\": \"taiwan\",\n    \"Tajikistan\": \"tajikistan\",\n    \"Tanzania\": \"tanzania\",\n    \"Thailand\": \"thailand\",\n    \"Timor-Leste\": \"timor_leste\",\n    \"Togo\": \"togo\",\n    \"Tonga\": \"tonga\",\n    \"Trinidad_and_Tobago\": \"trinidad_and_tobago\",\n    \"Tunisia\": \"tunisia\",\n    \"Turkey\": \"turkey\",\n    \"Turkmenistan\": \"turkmenistan\",\n    \"Tuvalu\": \"tuvalu\",\n    \"Uganda\": \"uganda\",\n    \"Ukraine\": \"ukraine\",\n    \"United_Arab_Emirates\": \"united_arab_emirates\",\n    \"United_Kingdom\": \"uk\",\n    \"United_States_of_America\": \"usa\",\n    \"Uruguay\": \"uruguay\",\n    \"Uzbekistan\": \"uzbekistan\",\n    \"Vanuatu\": \"vanuatu\",\n    \"Vatican_City\": \"vatican\",\n    \"Venezuela\": \"venezuela\",\n    \"Vietnam\": \"vietnam\",\n    \"Yemen\": \"yemen\",\n    \"Zambia\": \"zambia\",\n  }\n\n  const ageRangeMapping = {\n    \"5_9yrs\": \"0_17_years_old_a619c9b\",\n    \"10_14yrs\": \"18_59_years_old_b6fd344\",\n    \"15_18yrs\": \"not_indicated_4f3457b\",\n    \"19_25yrs\": \"19_25_years_old_4d4ddce\",\n    \"26_59yrs\": \"26_59_years_old_04359cb\",\n    \"60_above_yrs\": \"60_and_above_b0f9d41\",\n    \"Unknown\": \"unknown_3e07f9e\",\n    \"Mixed_group_of_people\": \"mixed_group_of_people_f34be4b\"\n  };\n\n  const caseCategoryMapping = {\n    \"pending_categorization\": \"_pending_categorization__f2609f3\",\n    \"request_info_1\": \"request_or_suggestion_debcecd\",\n    \"request_info_2\": \"request_for_information___about_response_actors_be74193\",\n    \"request_info_3\": \"request_for_information___about_information_provision_and_feedback_channels_35e1766\",\n    \"request_info_4\": \"request_for_information___other_cec52c2\",\n    \"request_assistance_1\": \"report_8751b89\",\n    \"request_assistance_2\": \"request_for_assistance_or_services___civil_registration_and_legal_documentation_efc993f\",\n    \"request_assistance_3\": \"request_for_assistance_or_services___other_9639ea2\",\n    \"complaint_assist_activities_1\": \"observation__perception_or_belief_0230bfc\",\n    \"complaint_assist_activities_2\": \"complaint_about_assistance_and_activities___issues_with_the_activities_or_assistance_services_provided__5b0d1fd\",\n    \"complaint_assist_activities_3\": \"complaint_about_assistance_and_activities___issues_with_aid_items_11715aa\",\n    \"complaint_assist_activities_4\": \"complaint_about_assistance_and_activities___other_c3d4da3\",\n    \"complaint_behavior_1\": \"other_61db39d\",\n    \"complaint_behavior_2\": \"complaint_about_the_behavior_of_aid_workers___allegation_of_child_marriage__similar_union_with_a_child_or_sexual_activity_with_a_child_7b260a2\",\n    \"complaint_behavior_3\": \"complaint_about_the_behavior_of_aid_workers___allegation_of_harmful_practices_a7bc0bc\",\n    \"complaint_behavior_4\": \"complaint_about_the_behavior_of_aid_workers___allegation_of_slave_forced_exploitative_labour_and_or_human_trafficking_c9bbb82\",\n    \"complaint_behavior_5\": \"complaint_about_the_behavior_of_aid_workers___allegation_of_corruption__bribery__theft_or_fraud_a5a9862\",\n    \"complaint_behavior_6\": \"complaint_about_the_behavior_of_aid_workers___allegation_of_negligence_on_professional_or_personal_capacity_cac54d9\",\n    \"complaint_behavior_7\": \"complaint_about_the_behavior_of_aid_workers___allegation_of_physical_violence_or_verbal_abuse_d2854bf\",\n    \"complaint_behavior_8\": \"complaint_about_the_behavior_of_aid_workers___allegation_of_harassment__including_sexual_harassment___a354c46\",\n    \"complaint_behavior_9\": \"complaint_about_the_behavior_of_aid_workers___allegation_of_breach_of_duties_of_independence__neutrality__and_impartiality_7ef6b4b\",\n    \"complaint_behavior_10\": \"complaint_about_the_behavior_of_aid_workers___allegation_of_less_serious_safeguarding_concerns_22ffb8a\",\n    \"complaint_behavior_11\": \"complaint_about_the_behavior_of_aid_workers___allegation_of_unethical_evidence_activities_2521f33\",\n    \"safety_security_1\": \"report_on_safety_or_security_issue_0ec19e4\",\n    \"safety_security_2\": \"safety_and_security___missing_person_reports_991cd84\",\n    \"safety_security_3\": \"safety_and_security___occupational_health_and_safety_incidents_a44e245\",\n    \"safety_security_4\": \"safety_and_security___environmental_and_social_violations_and_incidents_fb29146\",\n    \"safety_security_5\": \"safety_and_security___security_incidents_3693bfa\",\n    \"safety_security_6\": \"safety_and_security___diversion_of_aid__dc68a2a\",\n    \"safety_security_7\": \"safety_and_security___politicization_of_aid_aec953e\",\n    \"safety_security_8\": \"safety_and_security___data_breaches_and_information_security_incidents_3da9b20\",\n    \"safety_security_9\": \"safety_and_security___other_b4fa79a\",\n    \"observations_suggestions_1\": \"observation_or_suggestion_aa54ec9\",\n    \"observations_suggestions_2\": \"observations_and_suggestions___about_access_to_information_and_assistance_bc7a83b\",\n    \"observations_suggestions_3\": \"observations_and_suggestions___about_community_beliefs_and_rumours_a6def10\",\n    \"observations_suggestions_4\": \"observations_and_suggestions___other_773c9d9\",\n    \"data_subject_request_1\": \"data_subject_request_bed8a87\",\n    \"data_subject_request_2\": \"data_subject_request___information_about_the_personal_data_processing_1fd7b69\",\n    \"data_subject_request_3\": \"data_subject_request___copy_of_own_personal_data_38d808c\",\n    \"data_subject_request_4\": \"data_subject_request___delete_personal_data__partial_or_total___88c6d9a\",\n    \"data_subject_request_5\": \"data_subject_request___correct_update_personal_data_260c6c9\",\n    \"data_subject_request_6\": \"data_subject_request___limit_the_processing_of_personal_data_29b9a14\",\n    \"data_subject_request_7\": \"data_subject_request___human_review_of_automated_decision_making_7182a3a\",\n    \"issue_cfrm_1\": \"issue_interacting_with_the_cfrm_08dab07\",\n    \"issue_cfrm_2\": \"data_subject_request____63f5862\",\n    \"issue_cfrm_3\": \"issue_interacting_with_the_cfrm___abusive_malicious_feedback_providers_2c2ab65\",\n    \"issue_cfrm_4\": \"issue_interacting_with_the_cfrm___cancelled_submissions_8fafbaa\",\n    \"issue_cfrm_5\": \"issue_interacting_with_the_cfrm___other_f662a8e\"\n  };\n\n  const programmaticAreaMapping = {\n    \"Pending_categorization\": \"local_integration_4721a6c\",\n    \"Not_applicable\": \"sexual_exploitation_and_abuse__sea__c2b098e\",\n    \"Adolescent_Development_and_Participation\": \"a__adolescent_development_and_participation_b19f2ba\",\n    \"Access_and_Logistics\": \"logistics_f1ce006\",\n    \"Camp_Coordination_and_Camp_Management\": \"camp_coordination_and_camp_management__cccm__e9d90b3\",\n    \"Cash_Assistance_and_Social_Protection\": \"cash_assistance_086f72b\",\n    \"Civil-Military_Coordination\": \"civil_military_coordination_87b1aca\",\n    \"Child_Protection\": \"child_protection_72b4d71\",\n    \"Disability_and_Inclusion\": \"disability_and_inclusion_e537ca8\",\n    \"Early_Childhood_Development\": \"early_childhood_development_2c517c5\",\n    \"Education\": \"education_d3bfe8f\",\n    \"Early_Recovery\": \"early_recovery_c6e511c\",\n    \"Emergency_Telecommunications\": \"emergency_telecommunications_ee553b2\",\n    \"Energy_and_Environment\": \"energy_and_environment_fd73e2b\",\n    \"Food_Security_and_Livelihoods\": \"food_security_0e10495\",\n    \"Gender_Based_Violence\": \"gender_based_violence__gbv__781a991\",\n    \"Health_and_Immunisation\": \"health_ee4020e\",\n    \"Housing,_Land_and_Property\": \"housing__land_and_property_109da85\",\n    \"Mental_Health_and_Psychosocial_Support\": \"mental_health_and_psychosocial_support__mhpss__abac8de\",\n    \"Migrants\": \"migrants__registration__resettlement__rsd__repatriation__local_integration__complementary_pathways__etc___aa10d1b\",\n    \"Mine_Action\": \"mine_action_f5161ba\",\n    \"Nutrition\": \"nutrition_03abf98\",\n    \"Parenting\": \"parenting_84b0c4c\",\n    \"Protection\": \"protection_0e30687\",\n    \"Shelter\": \"shelter_ae9eb74\",\n    \"Social_and_Behaviour_Change\": \"social_and_behaviour_change__sbc__b64e02a\",\n    \"WASH\": \"wash_d59fd40\"\n  };\n\n  const locationMapping = {\n    \"admin1\": \"BIH001\",\n    \"admin2\": \"BIH002\",\n    \"admin3\": \"BIH003\",\n    \"admin4\": \"BIH004\",\n    \"admin5\": \"BIH005\",\n    \"admin6\": \"BIH006\",\n    \"admin7\": \"BIH007\",\n    \"admin8\": \"BIH008\",\n    \"admin9\": \"BIH010\",\n    \"admin15\": \"BIH016\",\n    \"admin16\": \"BIH009\",\n    \"admin17\": \"BIH017\"\n  };\n\n  const vulnerabilityMapping = {\n    \"None\": \"none_9052aa8\",\n    \"Alcohol_drug_abuse_in_family\": \"alcohol__drug_abuse_in_family_0e1da79\",\n    \"Child_headed_household\": \"orphan_f6104f0\",\n    \"HIV+\": \"hiv__64150e2\",\n    \"IDP_Refugee_Statelessness\": \"statelessness_51c7096\",\n    \"Member_of_marginalised_group\": \"member_of_marginalised_group__eg__due_to_religion__ethnicity__496febf\",\n    \"Person_with_disability\": \"person_with_special_needs_afa807f\",\n    \"Pregnant_or_lactating_woman\": \"idp_d535e6f\",\n    \"Unaccompanied_or_separated_children\": \"refugee_4fa85ce\",\n    \"Mixed_group_of_people\": \"mixed_group_of_people_e7aa51f\"\n  };\n\n  const languageMapping = {\n    \"Language1\": \"language1\",\n    \"Language2\": \"language4\",\n    \"Language3\": \"language5\",\n    \"Language4\": \"language6\",\n    \"Language5\": \"language2\",\n    \"Language6\": \"language7\",\n    \"Other\": \"language8\"\n  };\n\n  const consentFromMapping = {\n    \"Individual\": \"individual__self_reporting__e45b925\",\n    \"Caregiver\": \"caregiver__legal_guardian__4df2a59\",\n    \"Social_worker\": \"social_worker_0cd94f9\",\n    \"Teacher\": \"teacher_99ba24d\",\n    \"Other\": \"other_5b3b632\"\n  };\n\n  const formatPreferredChannelOfCommunication = (text) => {\n    if (text === null || text === undefined) {\n      return '';\n    }\n    return text.replace(/_/g, ' ');\n  };\n\n  const checkDisclosure = (disclosure) => {\n    if (disclosure) {\n      return disclosure === \"OK\";\n    }\n    return false;\n  };\n\n  const formatRegistrationDate = (date) => {\n    const parsedDate = dateFns.parse(date, \"dd-MMM-yyyy\", new Date());\n\n    return dateFns.format(parsedDate, \"yyyy-MM-dd\");\n  }\n\n  //Perform input data mapping\n  state.mappedData = {\n    registration_date: formatRegistrationDate(state.data.registration_date),\n    sex: genderMapping[state.data.sex],\n    age_range_3df3bdb: ageRangeMapping[state.data.age_range],\n    case_category_80a3d81: caseCategoryMapping[state.data.case_category_80a3d81],\n    programmatic_area_26ac9e6: programmaticAreaMapping[state.data.programmatic_area],\n    location_current: locationMapping[state.data.location],\n    diversity_factor_s__98eb91b: (state.data.vulnerability_factor || \"\")\n      .split(\" \")\n      .map(factor => vulnerabilityMapping[factor])\n      .filter(Boolean),\n    nationality: [nationalityMapping[state.data.nationality]],\n    preferred_channel_of_communication_f25a28d: formatPreferredChannelOfCommunication(state.data.preferred_channel_of_communication),\n    disclosure_other_orgs: checkDisclosure(state.data.disclosure_other_orgs),\n    language: [languageMapping[state.data.language]],\n    consent_assent_obtained_from_c4a5c9e: (state.data.consent || \"\")\n      .split(\" \")\n      .map(factor => consentFromMapping[factor])\n      .filter(Boolean)\n  }\n\n  return state;\n\n});\n",
+          "adaptor": "@openfn/language-common@2.3.1",
+          "project_credential_id": null
+        },
+        "Register-feedback-in-Primero": {
+          "id": "80961572-59e0-4992-bc0f-3707dbddfbd7",
+          "name": "Register feedback in Primero",
+          "body": "//Create case to be sent to primero\nfn(state => {\n  state.attachments = state.data['_attachments'];\n  return state\n})\n\ncreateCase({\n  data: {\n    registration_date: state.mappedData.registration_date,\n    location_current: state.mappedData.location_current,\n    feedback_comment_f076498: state.data.feedback_comment,\n    sex: state.mappedData.sex,\n    name_first: state.data.name_first,\n    name_last: state.data.name_last,\n    age_range_3df3bdb: state.mappedData.age_range_3df3bdb,\n    disclosure_other_orgs: state.mappedData.disclosure_other_orgs,\n    date_of_birth: state.data.date_of_birth,\n    nationality: state.mappedData.nationality,\n    preferred_channel_of_communication_f25a28d: state.mappedData.preferred_channel_of_communication_f25a28d,\n    case_category_80a3d81: state.mappedData.case_category_80a3d81,\n    programmatic_area_26ac9e6: state.mappedData.programmatic_area_26ac9e6,\n    telephone_current: state.data.channel_of_communication_phonenumber,\n    email_b3fb5e0: state.data.channel_of_communication_email,\n    address_current: state.data.channel_of_communication_physical_address,\n    language: state.mappedData.language,\n    consent_assent_obtained_from_c4a5c9e: state.mappedData.consent_assent_obtained_from_c4a5c9e,\n    consent_source_other: state.data.consent_other,\n    immediate_actions_taken_in_response_to_the_feedback_received_ecd46ba: state.data.immediate_actions,\n    other_language_of_interaction_00ed07f: state.data.language_comment,\n    diversity_factor_s__98eb91b: state.mappedData.diversity_factor_s__98eb91b,\n    feedback_channel_eba5764: 'mobile_teams__field_staff__monitors_afdfc51',\n    module_id: \"primeromodule-cp\",\n  },\n});\n",
+          "adaptor": "@openfn/language-primero@3.1.0",
+          "project_credential_id": "687e2087-42c2-4e7c-996d-c6baa3bc40ab"
+        },
+        "Get-attachment-From-Inform": {
+          "id": "8a5e416e-f1af-40b7-a295-426c50f48236",
+          "name": "Get attachment From Inform",
+          "body": "\nfn(state =>{\n  state.primeroCaseId = state.data.id;\n  return state\n})\nget(`https://data.inform.unicef.org${$.attachments[0].download_url}`, {\n  maxRedirections: 0\n})\n\nget($.response.headers.location, {\n  parseAs: 'base64'\n}).then(async (state) => {\n   const attachments = state.attachments[0];\n   const imageEncodedString = state.data\n\n      delete state.data\n    state.imageData = {\n    attachment: imageEncodedString,\n    attachment_type: \"image\",\n    content_type: attachments.mimetype,\n    date: new Date().toISOString(),\n    field_name: \"photos\",\n    file_name: attachments.name,\n    is_current: false\n  };\n\nreturn state\n\n})\n\n\n\n// fn(state => {\n\n//   return encodeimage(state)\n\n// })\n",
+          "adaptor": "@openfn/language-http@7.0.5",
+          "project_credential_id": null
+        },
+        "Upload-attachment-to-Primero": {
+          "id": "a52fcb63-8cac-4da3-b184-72bb415d1c7f",
+          "name": "Upload attachment to Primero",
+          "body": "\n\nhttp.post(`cases/${$.primeroCaseId}/attachments`, $.imageData)\n",
+          "adaptor": "@openfn/language-primero@3.1.0",
+          "project_credential_id": "687e2087-42c2-4e7c-996d-c6baa3bc40ab"
+        }
+      },
+      "triggers": {
+        "webhook": {
+          "enabled": false,
+          "id": "a1a27418-4575-4562-8b2c-65e017a5c46e",
+          "type": "webhook"
+        }
+      },
+      "deleted_at": null,
+      "lock_version": 1
     }
   },
+  "allow_support_access": false,
   "requires_mfa": false
 }
