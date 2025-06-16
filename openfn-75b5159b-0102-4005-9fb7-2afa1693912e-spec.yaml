@@ -11,6 +11,9 @@ credentials:
   rediet@openfn.org-Unicare-BIH-Primero-Demo:
     name: Unicare BIH Primero Demo
     owner: rediet@openfn.org
+  rediet@openfn.org-Unicef-Inform:
+    name: Unicef Inform
+    owner: rediet@openfn.org
 workflows:
   inform-to-unicare:
     name: inform-to-unicare
@@ -420,6 +423,11 @@ workflows:
         credential: rediet@openfn.org-Unicare-BIH-Primero-Demo
         body: |
           // //Create/Update case to be sent to primero
+          fn(state => {
+            state.attachments = state.data['_attachments'];
+            return state
+          })
+
           upsertCase({
             externalIds: ["case_id"],
             data: state => ({
@@ -451,6 +459,53 @@ workflows:
             }),
           });
 
+      Get-attachment-From-Inform:
+        name: Get attachment From Inform
+        adaptor: '@openfn/language-inform@1.0.1'
+        credential: rediet@openfn.org-Unicef-Inform
+        body: |
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+
+          fn(state =>{
+            state.primeroCaseId = state.data.id;
+            return state
+          })
+
+          downloadAttachment($.attachments[0].id, {
+          filename: $.attachments[0].filename,
+          parseAs: 'base64',
+          });
+      Upload-attachment-to-Primero:
+        name: Upload attachment to Primero
+        adaptor: '@openfn/language-primero@3.1.0'
+        credential: rediet@openfn.org-Unicare-BIH-Primero-Demo
+        body: |
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+
+          fn(async (state) => {
+            const attachments = state.attachments[0]; 
+            const imageEncodedString = state.data; 
+
+            delete state.data; 
+
+            state.data = {
+              attachment: imageEncodedString,
+              attachment_type: "image",         
+              content_type: attachments.mimetype,
+              date: new Date().toISOString(),
+              field_name: "photos",            
+              file_name: attachments.name,
+              is_current: false
+            };
+
+            return state;
+          });
+
+
+          http.post(`cases/${$.primeroCaseId}/attachments`, $.data)
+
     triggers:
       webhook:
         type: webhook
@@ -464,6 +519,19 @@ workflows:
       Transform-and-Map-data->Register-feedback-in-Primero:
         source_job: Transform-and-Map-data
         target_job: Register-feedback-in-Primero
+        condition_type: on_job_success
+        enabled: true
+      Register-feedback-in-Primero->Get-attachment-From-Inform:
+        source_job: Register-feedback-in-Primero
+        target_job: Get-attachment-From-Inform
+        condition_type: js_expression
+        condition_label: Attachment Exists
+        condition_expression: |
+          state.data.id && state.attachments && state.attachments?.length > 0
+        enabled: true
+      Get-attachment-From-Inform->Upload-attachment-to-Primero:
+        source_job: Get-attachment-From-Inform
+        target_job: Upload-attachment-to-Primero
         condition_type: on_job_success
         enabled: true
   inform-to-unicare-with-attachment:
@@ -879,8 +947,10 @@ workflows:
             return state
           })
 
-          createCase({
-            data: {
+          upsertCase({
+            externalIds: ["case_id"],
+            data: state => ({
+              case_id: state.data._uuid,
               registration_date: state.mappedData.registration_date,
               location_current: state.mappedData.location_current,
               feedback_comment_f076498: state.data.feedback_comment,
@@ -905,15 +975,15 @@ workflows:
               diversity_factor_s__98eb91b: state.mappedData.diversity_factor_s__98eb91b,
               feedback_channel_eba5764: 'mobile_teams__field_staff__monitors_afdfc51',
               module_id: "primeromodule-cp",
-            },
+            }),
           });
 
       Get-attachment-From-Inform:
         name: Get attachment From Inform
         adaptor: '@openfn/language-http@7.0.5'
-        credential: null
+        credential: hunter@openfn.org-Inform-HTTP
         body: |
-
+          
           fn(state =>{
             state.primeroCaseId = state.data.id;
             return state
@@ -942,20 +1012,12 @@ workflows:
           return state
 
           })
-
-
-
-          // fn(state => {
-
-          //   return encodeimage(state)
-
-          // })
       Upload-attachment-to-Primero:
         name: Upload attachment to Primero
         adaptor: '@openfn/language-primero@3.1.0'
         credential: rediet@openfn.org-Unicare-BIH-Primero-Demo
         body: |
-
+          
 
           http.post(`cases/${$.primeroCaseId}/attachments`, $.imageData)
 
