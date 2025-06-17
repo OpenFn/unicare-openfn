@@ -2,12 +2,9 @@ name: unicare-bih
 description: null
 collections: null
 credentials:
-  hunter@openfn.org-Inform-HTTP:
-    name: Inform HTTP
-    owner: hunter@openfn.org
-  hunter@openfn.org-Primero-Unicare-test:
-    name: Primero Unicare test
-    owner: hunter@openfn.org
+  rediet@openfn.org-Primero-NW-Cred:
+    name: Primero NW Cred
+    owner: rediet@openfn.org
   rediet@openfn.org-Unicare-BIH-Primero-Demo:
     name: Unicare BIH Primero Demo
     owner: rediet@openfn.org
@@ -476,6 +473,7 @@ workflows:
           filename: $.attachments[0].filename,
           parseAs: 'base64',
           });
+
       Upload-attachment-to-Primero:
         name: Upload attachment to Primero
         adaptor: '@openfn/language-primero@3.1.0'
@@ -528,6 +526,7 @@ workflows:
         condition_label: Attachment Exists
         condition_expression: |
           state.data.id && state.attachments && state.attachments?.length > 0
+
         enabled: true
       Get-attachment-From-Inform->Upload-attachment-to-Primero:
         source_job: Get-attachment-From-Inform
