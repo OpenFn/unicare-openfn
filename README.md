@@ -101,8 +101,10 @@ These assumptions should be reviewed if system configurations or forms are updat
 ## 7. Security & Data Protection
 To ensure safe and responsible data handling, this integration follows UNICEF’s internal guidelines and security best practices. The checklist outlines key measures related to transport encryption, access control, authentication, PII handling, and system configuration management.
 
-View the full Security Checklist here: [Security Checklist for Inform–UNICARE Integration](https://docs.google.com/document/d/1sx_QqQg0yPHGRI5ZVbO_SjlWiPLGoYmL/edit?usp=sharing&ouid=100028693760577730296&rtpof=true&sd=true)
-
+View the full Security Checklist here:
+- **BiH:** [Security Checklist for Inform–UNICARE BiH Integration](https://docs.google.com/document/d/1sx_QqQg0yPHGRI5ZVbO_SjlWiPLGoYmL/edit?usp=sharing&ouid=100028693760577730296&rtpof=true&sd=true)
+- **Türkiye:** [Security Checklist for Inform–UNICARE Turkey Integration](https://docs.google.com/document/d/1qF4wrt4xPoEU4JzBxpzdUzxyXoC_iF1g/edit))
+  
 ## 8. Change Management Guidelines
 
 Administrators should review the integration configuration when changes are made to the Inform form or the Primero instance. Common changes that require updates include:
