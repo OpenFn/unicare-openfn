@@ -75,7 +75,7 @@ Submission data from Inform is transformed to match Primero's required case stru
 
 **Mapping Sheets**:
 - [BiH Mapping Specification](https://docs.google.com/spreadsheets/d/1d0IXdaI3yrvOUHdr0a6hGmUX6dhLLyK6pr8STrgcsDA)
-- [Türkiye Mapping Specification](https://docs.google.com/spreadsheets/d/1p9JXzE0HDu5adol_knRa_mGPe_2xrkHXkNE61cmm4Y4)
+- [Türkiye Mapping Specification](https://docs.google.com/spreadsheets/d/1-1Sq5ul_rFWFVXsDID531RUUwbT2RxzdeD2HHkKGAz8/edit?gid=1275153608#gid=1275153608)
 
 **Static metadata mappings**
 
