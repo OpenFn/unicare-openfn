@@ -55,7 +55,7 @@ The integration is triggered automatically via a webhook configured in the Infor
 
 ### Türkiye
 **Trigger type**: Webhook  
-**Source**: Inform form [BiH Face-to-Face Feedback Training Form]([https://web.inform.unicef.org/x/KblafkQ1](https://web.inform.unicef.org/x/WJsD7Pi8))  
+**Source**: Inform form [BiH Face-to-Face Feedback Training Form](https://web.inform.unicef.org/x/WJsD7Pi8)  
 **Destination**: OpenFn job webhook URL  
 **Payload**: JSON-formatted form submission  
 **Timing**: Triggered instantly upon form submission
