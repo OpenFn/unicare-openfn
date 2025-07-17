@@ -1,8 +1,10 @@
-# Inform–UNICARE Interoperability Solution for Bosnia and Herzegovina (BiH)
+# Inform–UNICARE Interoperability Solution for Bosnia and Herzegovina (BiH) and Türkiye
 
-This solution enables automated, secure data exchange between **Inform** (UNICEF’s data collection platform built on Ona) and **UNICARE** (an implementation of the Primero platform used for grievance, feedback, and case management). The workflow supports seamless interoperability to strengthen Complaints, Feedback, and Response Mechanisms (CFRMs) for UNICEF and its implementing partners in **Bosnia and Herzegovina (BiH)**.
+This solution enables automated, secure data exchange between **Inform** (UNICEF’s data collection platform built on Ona) and **UNICARE** (an implementation of the Primero platform used for grievance, feedback, and case management). The workflow supports seamless interoperability to strengthen Complaints, Feedback, and Response Mechanisms (CFRMs) for UNICEF and its implementing partners in **Bosnia and Herzegovina (BiH)** and **Türkiye**.
 
 The integration ensures that feedback and grievances submitted through Inform are automatically processed, validated, and registered as cases in UNICARE. This improves accountability and responsiveness by enabling real-time follow-up through a centralized case management system. The solution is adaptable for use in other countries and contexts using similar tools and workflows.
+
+The same solution has been adapted for use in Türkiye with minor configuration differences, enabling seamless feedback processing across both countries.
 
 ## 1. Project Overview
 
@@ -19,8 +21,7 @@ The implemented workflow in Bosnia and Herzegovina is designed to be adaptable t
 **Workflow diagram**
 
 _Refer to the diagram below for an overview of the data flow from Inform to OpenFn to UNICARE._
-![UNICARE BIH](https://github.com/user-attachments/assets/b3e5061b-b0f8-4a59-8f3d-2912be05bc16)
-
+<img width="2122" height="827" alt="UNICARE BIH Turkey - Workflow" src="https://github.com/user-attachments/assets/1d60f7be-965e-48b4-8d96-7dc717c7451f" />
 
 ## 3. System Integrations
 
@@ -45,8 +46,16 @@ The integration uses the following adaptors:
 
 The integration is triggered automatically via a webhook configured in the Inform platform. When a user submits a feedback form, Inform immediately sends the submission payload to OpenFn via HTTP POST.
 
+### Bosnia and Herzegovina (BiH)
 **Trigger type**: Webhook  
 **Source**: Inform form [BiH Face-to-Face Feedback Training Form](https://web.inform.unicef.org/x/KblafkQ1)  
+**Destination**: OpenFn job webhook URL  
+**Payload**: JSON-formatted form submission  
+**Timing**: Triggered instantly upon form submission
+
+### Türkiye
+**Trigger type**: Webhook  
+**Source**: Inform form [BiH Face-to-Face Feedback Training Form]([https://web.inform.unicef.org/x/KblafkQ1](https://web.inform.unicef.org/x/WJsD7Pi8))  
 **Destination**: OpenFn job webhook URL  
 **Payload**: JSON-formatted form submission  
 **Timing**: Triggered instantly upon form submission
@@ -55,11 +64,18 @@ OpenFn receives the data, validates and maps the fields, and sends a case creati
 
 ## 5. Data Mappings and Protocols
 
-Submission data from Inform is transformed to match Primero's required case structure. Field mappings include location, issue category, reporter details, and feedback description. Mappings are based on the Primero configuration in BiH.
+Submission data from Inform is transformed to match Primero's required case structure. Field mappings include location, issue category, reporter details, and feedback description. Mappings are based on the Primero configuration in BiH and Turkey.
 
-- Full mapping documentation is available here: [Mapping Specification](https://docs.google.com/spreadsheets/d/1d0IXdaI3yrvOUHdr0a6hGmUX6dhLLyK6pr8STrgcsDA/edit#gid=1275153608)
-- Submissions are collected using the following form:  [BiH Face-to-Face Feedback Training Form](https://web.inform.unicef.org/x/KblafkQ1)
+**OpenFn Project**:
 - Project workspace and job logic can be found in the OpenFn implementation:  [OpenFn Project Workspace](https://app.openfn.org/projects/75b5159b-0102-4005-9fb7-2afa1693912e/w/020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b?a=6fab331e-4f6a-4167-9219-c7ce28bbcf2d&s=46fa271d-2124-4a95-8b79-233392bd0a5a)
+
+**Source Forms**:
+- **BiH**: [BiH Face-to-Face Feedback Training Form](https://web.inform.unicef.org/x/KblafkQ1)
+- **Türkiye**: [Face-to-face complaints and feedback form](https://web.inform.unicef.org/x/WJsD7Pi8)
+
+**Mapping Sheets**:
+- [BiH Mapping Specification](https://docs.google.com/spreadsheets/d/1d0IXdaI3yrvOUHdr0a6hGmUX6dhLLyK6pr8STrgcsDA)
+- [Türkiye Mapping Specification](https://docs.google.com/spreadsheets/d/1p9JXzE0HDu5adol_knRa_mGPe_2xrkHXkNE61cmm4Y4)
 
 **Static metadata mappings**
 
