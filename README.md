@@ -55,7 +55,7 @@ The integration is triggered automatically via a webhook configured in the Infor
 
 ### Türkiye
 **Trigger type**: Webhook  
-**Source**: Inform form [BiH Face-to-Face Feedback Training Form](https://web.inform.unicef.org/x/WJsD7Pi8)  
+**Source**: Inform form [Face-to-face complaints and feedback form](https://web.inform.unicef.org/x/WJsD7Pi8)  
 **Destination**: OpenFn job webhook URL  
 **Payload**: JSON-formatted form submission  
 **Timing**: Triggered instantly upon form submission
@@ -68,10 +68,6 @@ Submission data from Inform is transformed to match Primero's required case stru
 
 **OpenFn Project**:
 - Project workspace and job logic can be found in the OpenFn implementation:  [OpenFn Project Workspace](https://app.openfn.org/projects/75b5159b-0102-4005-9fb7-2afa1693912e/w/020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b?a=6fab331e-4f6a-4167-9219-c7ce28bbcf2d&s=46fa271d-2124-4a95-8b79-233392bd0a5a)
-
-**Source Forms**:
-- **BiH**: [BiH Face-to-Face Feedback Training Form](https://web.inform.unicef.org/x/KblafkQ1)
-- **Türkiye**: [Face-to-face complaints and feedback form](https://web.inform.unicef.org/x/WJsD7Pi8)
 
 **Mapping Sheets**:
 - [BiH Mapping Specification](https://docs.google.com/spreadsheets/d/1d0IXdaI3yrvOUHdr0a6hGmUX6dhLLyK6pr8STrgcsDA)
