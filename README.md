@@ -1,10 +1,10 @@
-# Inform–UNICARE Interoperability Solution for Bosnia and Herzegovina (BiH) and Türkiye
+# Inform–UNICARE Interoperability Solution for Bosnia and Herzegovina (BiH) and Turkey
 
-This solution enables automated, secure data exchange between **Inform** (UNICEF’s data collection platform built on Ona) and **UNICARE** (an implementation of the Primero platform used for grievance, feedback, and case management). The workflow supports seamless interoperability to strengthen Complaints, Feedback, and Response Mechanisms (CFRMs) for UNICEF and its implementing partners in **Bosnia and Herzegovina (BiH)** and **Türkiye**.
+This solution enables automated, secure data exchange between **Inform** (UNICEF’s data collection platform built on Ona) and **UNICARE** (an implementation of the Primero platform used for grievance, feedback, and case management). The workflow supports seamless interoperability to strengthen Complaints, Feedback, and Response Mechanisms (CFRMs) for UNICEF and its implementing partners in **Bosnia and Herzegovina (BiH)** and **Turkey**.
 
 The integration ensures that feedback and grievances submitted through Inform are automatically processed, validated, and registered as cases in UNICARE. This improves accountability and responsiveness by enabling real-time follow-up through a centralized case management system. The solution is adaptable for use in other countries and contexts using similar tools and workflows.
 
-The same solution has been adapted for use in Türkiye with minor configuration differences, enabling seamless feedback processing across both countries.
+The same solution has been adapted for use in Turkey with minor configuration differences, enabling seamless feedback processing across both countries.
 
 ## 1. Project Overview
 
@@ -53,7 +53,7 @@ The integration is triggered automatically via a webhook configured in the Infor
 **Payload**: JSON-formatted form submission  
 **Timing**: Triggered instantly upon form submission
 
-### Türkiye
+### Turkey
 **Trigger type**: Webhook  
 **Source**: Inform form [Face-to-face complaints and feedback form](https://web.inform.unicef.org/x/WJsD7Pi8)  
 **Destination**: OpenFn job webhook URL  
@@ -70,7 +70,7 @@ Submission data from Inform is transformed to match Primero's required case stru
 
 **Mapping Sheets**:
 - [BiH Mapping Specification](https://docs.google.com/spreadsheets/d/1d0IXdaI3yrvOUHdr0a6hGmUX6dhLLyK6pr8STrgcsDA)
-- [Türkiye Mapping Specification](https://docs.google.com/spreadsheets/d/1-1Sq5ul_rFWFVXsDID531RUUwbT2RxzdeD2HHkKGAz8/edit?gid=1275153608#gid=1275153608)
+- [Turkey Mapping Specification](https://docs.google.com/spreadsheets/d/1-1Sq5ul_rFWFVXsDID531RUUwbT2RxzdeD2HHkKGAz8/edit?gid=1275153608#gid=1275153608)
 
 **Static metadata mappings**
 
@@ -98,7 +98,7 @@ To ensure safe and responsible data handling, this integration follows UNICEF’
 
 View the full Security Checklist here:
 - **BiH:** [Security Checklist for Inform–UNICARE BiH Integration](https://docs.google.com/document/d/1sx_QqQg0yPHGRI5ZVbO_SjlWiPLGoYmL/edit?usp=sharing&ouid=100028693760577730296&rtpof=true&sd=true)
-- **Türkiye:** [Security Checklist for Inform–UNICARE Turkey Integration](https://docs.google.com/document/d/1qF4wrt4xPoEU4JzBxpzdUzxyXoC_iF1g/edit)
+- **Turkey:** [Security Checklist for Inform–UNICARE Turkey Integration](https://docs.google.com/document/d/1qF4wrt4xPoEU4JzBxpzdUzxyXoC_iF1g/edit)
   
 ## 8. Change Management Guidelines
 
