@@ -21,7 +21,7 @@ The implemented workflow in Bosnia and Herzegovina is designed to be adaptable t
 **Workflow diagram**
 
 _Refer to the diagram below for an overview of the data flow from Inform to OpenFn to UNICARE._
-<img width="2122" height="827" alt="UNICARE BIH Turkey - Workflow" src="https://github.com/user-attachments/assets/1d60f7be-965e-48b4-8d96-7dc717c7451f" />
+<img alt="UNICARE BIH Turkey - Workflow" src="https://github.com/user-attachments/assets/1d60f7be-965e-48b4-8d96-7dc717c7451f" />
 
 ## 3. System Integrations
 
