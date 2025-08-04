@@ -66,8 +66,7 @@ OpenFn receives the data, validates and maps the fields, and sends a case creati
 
 Submission data from Inform is transformed to match Primero's required case structure. Field mappings include location, issue category, reporter details, and feedback description. Mappings are based on the Primero configuration in BiH and Turkey.
 
-**OpenFn Project**:
-- Project workspace and job logic can be found in the OpenFn implementation:  [OpenFn Project Workspace](https://app.openfn.org/projects/75b5159b-0102-4005-9fb7-2afa1693912e/w/020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b?a=6fab331e-4f6a-4167-9219-c7ce28bbcf2d&s=46fa271d-2124-4a95-8b79-233392bd0a5a)
+**OpenFn Project**: Implementation workspace and job logic can be found [here](https://app.openfn.org/projects/75b5159b-0102-4005-9fb7-2afa1693912e/w/020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b?a=6fab331e-4f6a-4167-9219-c7ce28bbcf2d&s=46fa271d-2124-4a95-8b79-233392bd0a5a)
 
 **Mapping Sheets**:
 - [BiH Mapping Specification](https://docs.google.com/spreadsheets/d/1d0IXdaI3yrvOUHdr0a6hGmUX6dhLLyK6pr8STrgcsDA)
@@ -99,7 +98,7 @@ To ensure safe and responsible data handling, this integration follows UNICEF’
 
 View the full Security Checklist here:
 - **BiH:** [Security Checklist for Inform–UNICARE BiH Integration](https://docs.google.com/document/d/1sx_QqQg0yPHGRI5ZVbO_SjlWiPLGoYmL/edit?usp=sharing&ouid=100028693760577730296&rtpof=true&sd=true)
-- **Türkiye:** [Security Checklist for Inform–UNICARE Turkey Integration](https://docs.google.com/document/d/1qF4wrt4xPoEU4JzBxpzdUzxyXoC_iF1g/edit))
+- **Türkiye:** [Security Checklist for Inform–UNICARE Turkey Integration](https://docs.google.com/document/d/1qF4wrt4xPoEU4JzBxpzdUzxyXoC_iF1g/edit)
   
 ## 8. Change Management Guidelines
 
