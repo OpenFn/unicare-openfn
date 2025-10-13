@@ -19,6 +19,31 @@ credentials:
     name: Unicef Inform
     owner: aleksa@openfn.org
 workflows:
+  auth-testing:
+    name: auth-testing
+    jobs:
+      primero-auth-test:
+        name: primero auth test
+        adaptor: '@openfn/language-primero@4.0.2'
+        credential: aleksa@openfn.org-PROD-Unicare-TUR-Primero
+        body: |
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+
+          getLocations({
+          page: 1,
+          per: 2
+          })
+    triggers:
+      webhook:
+        type: webhook
+        enabled: false
+    edges:
+      webhook->primero-auth-test:
+        source_trigger: webhook
+        target_job: primero-auth-test
+        condition_type: always
+        enabled: true
   inform-to-unicare-bih-demo:
     name: inform-to-unicare-bih-demo
     jobs:

@@ -341,6 +341,37 @@
           "condition_type": "on_job_success"
         }
       }
+    },
+    "auth-testing": {
+      "id": "1ecfb775-0503-4649-9fd0-8af4951350f0",
+      "name": "auth-testing",
+      "inserted_at": "2025-10-13T19:56:05.039762Z",
+      "lock_version": 6,
+      "triggers": {
+        "webhook": {
+          "enabled": false,
+          "id": "333bdaae-ddee-42b4-8795-0387d55b04c5",
+          "type": "webhook"
+        }
+      },
+      "jobs": {
+        "primero-auth-test": {
+          "id": "befddad4-b27d-4c56-8f20-2a09250b95c4",
+          "name": "primero auth test",
+          "body": "// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\n\ngetLocations({\npage: 1,\nper: 2\n})",
+          "adaptor": "@openfn/language-primero@4.0.2",
+          "project_credential_id": "1a59427b-3460-4c16-9dd4-6dfc033967f5"
+        }
+      },
+      "edges": {
+        "webhook->primero-auth-test": {
+          "enabled": true,
+          "id": "06eaad9e-e573-4963-84a7-a4df0f97020c",
+          "target_job_id": "befddad4-b27d-4c56-8f20-2a09250b95c4",
+          "source_trigger_id": "333bdaae-ddee-42b4-8795-0387d55b04c5",
+          "condition_type": "always"
+        }
+      }
     }
   },
   "allow_support_access": true,
