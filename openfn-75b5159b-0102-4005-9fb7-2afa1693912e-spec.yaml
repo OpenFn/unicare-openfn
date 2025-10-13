@@ -3,6 +3,12 @@ description: |
   UNICARE workflows for InForm-Primero data sync for Turkey and Bosnia country offices
 collections: null
 credentials:
+  aleksa@openfn.org-PROD-Unicare-BiH-Primero:
+    name: PROD Unicare BiH Primero
+    owner: aleksa@openfn.org
+  aleksa@openfn.org-PROD-Unicare-TUR-Primero:
+    name: PROD Unicare TUR Primero
+    owner: aleksa@openfn.org
   aleksa@openfn.org-Unicare-BIH-Primero-Demo:
     name: Unicare BIH Primero Demo
     owner: aleksa@openfn.org
@@ -2142,7 +2148,7 @@ workflows:
       Register-feedback-in-Primero:
         name: Register feedback in Primero
         adaptor: '@openfn/language-primero@3.1.0'
-        credential: aleksa@openfn.org-Unicare-Turkey-Primero-Demo
+        credential: aleksa@openfn.org-PROD-Unicare-TUR-Primero
         body: |
           // //Create/Update case to be sent to primero
           fn(state => {
@@ -2184,7 +2190,7 @@ workflows:
       Get-attachment-From-Inform:
         name: Get attachment From Inform
         adaptor: '@openfn/language-inform@1.0.1'
-        credential: null
+        credential: aleksa@openfn.org-Unicef-Inform
         body: |
           // Check out the Job Writing Guide for help getting started:
           // https://docs.openfn.org/documentation/jobs/job-writing-guide
@@ -2213,7 +2219,7 @@ workflows:
       Upload-attachment-to-Primero:
         name: Upload attachment to Primero
         adaptor: '@openfn/language-primero@3.1.0'
-        credential: aleksa@openfn.org-Unicare-Turkey-Primero-Demo
+        credential: aleksa@openfn.org-PROD-Unicare-TUR-Primero
         body: |
           // Check out the Job Writing Guide for help getting started:
           // https://docs.openfn.org/documentation/jobs/job-writing-guide

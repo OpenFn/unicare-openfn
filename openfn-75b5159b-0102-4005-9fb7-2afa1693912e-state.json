@@ -8,7 +8,6 @@
   "inserted_at": "2025-02-28T09:01:31Z",
   "updated_at": "2025-09-17T14:50:55Z",
   "parent_id": null,
-  "scheduled_deletion": null,
   "project_credentials": {
     "aleksa@openfn.org-Unicare-BIH-Primero-Demo": {
       "id": "687e2087-42c2-4e7c-996d-c6baa3bc40ab",
@@ -24,11 +23,23 @@
       "id": "e4033ea3-5b3e-42cb-a6a7-9decead47c92",
       "name": "Unicare Turkey Primero Demo",
       "owner": "aleksa@openfn.org"
+    },
+    "aleksa@openfn.org-PROD-Unicare-TUR-Primero": {
+      "id": "1a59427b-3460-4c16-9dd4-6dfc033967f5",
+      "name": "PROD Unicare TUR Primero",
+      "owner": "aleksa@openfn.org"
+    },
+    "aleksa@openfn.org-PROD-Unicare-BiH-Primero": {
+      "id": "b2041fa4-9156-490f-9950-958e6e85cb6b",
+      "name": "PROD Unicare BiH Primero",
+      "owner": "aleksa@openfn.org"
     }
   },
+  "scheduled_deletion": null,
   "history_retention_period": 7,
   "dataclip_retention_period": null,
   "retention_policy": "retain_all",
+  "version_history": [],
   "collections": {},
   "workflows": {
     "inform-to-unicare-bih-prod": {
@@ -259,8 +270,8 @@
     "inform-to-unicare-turkey-prod": {
       "id": "d6d779fe-d04b-4393-8a5e-d36d854f092b",
       "name": "inform-to-unicare-turkey-prod",
-      "inserted_at": "2025-10-08T05:17:19.343851Z",
-      "lock_version": 4,
+      "inserted_at": "2025-10-13T19:52:33.659890Z",
+      "lock_version": 7,
       "triggers": {
         "webhook": {
           "enabled": true,
@@ -281,21 +292,21 @@
           "name": "Register feedback in Primero",
           "body": "// //Create/Update case to be sent to primero\nfn(state => {\n  state.attachments = state.data['attachments'];\n  return state\n})\n\nupsertCase({\n  externalIds: [\"case_id\"],\n  data: state => ({\n    case_id: state.data._uuid,\n    registration_date: state.mappedData.registration_date,\n    location_current: state.mappedData.location_current, \n    feedback_comment_f076498: state.data.feedback_comment,\n    sex: state.mappedData.sex,\n    name_first: state.data.name_first,\n    name_last: state.data.name_last,\n    age_range_3df3bdb: state.mappedData.age_range_3df3bdb,\n    disclosure_other_orgs: state.mappedData.disclosure_other_orgs, \n    date_of_birth: state.data.date_of_birth,\n    nationality: state.mappedData.nationality,\n    preferred_channel_of_communication_f25a28d: state.mappedData.preferred_channel_of_communication_f25a28d, \n    protection_status: state.mappedData.protection_status,\n    protection_concerns: state.mappedData.protection_concerns,\n    telephone_current: state.data.channel_of_communication_phonenumber,\n    email_b3fb5e0: state.data.channel_of_communication_email,\n    address_current: state.data.channel_of_communication_physical_address,\n    language: state.mappedData.language,\n    consent_assent_obtained_from_c4a5c9e: state.mappedData.consent_assent_obtained_from_c4a5c9e,\n    consent_source_other: state.data.consent_other,\n    immediate_actions_taken_in_response_to_the_feedback_received_ecd46ba: state.data.immediate_actions,\n    other_language_of_interaction_00ed07f: state.data.language_comment,\n    diversity_factor_s__98eb91b: state.mappedData.diversity_factor_s__98eb91b,\n    feedback_channel_eba5764: 'mobile_teams__field_staff__monitors_afdfc51',\n    module_id: \"primeromodule-cp\",\n  }),\n});\n",
           "adaptor": "@openfn/language-primero@3.1.0",
-          "project_credential_id": "e4033ea3-5b3e-42cb-a6a7-9decead47c92"
+          "project_credential_id": "1a59427b-3460-4c16-9dd4-6dfc033967f5"
         },
         "Get-attachment-From-Inform": {
           "id": "5c1c31b9-f32b-46aa-8886-6e2728161f5b",
           "name": "Get attachment From Inform",
           "body": "// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\n\nfn(state =>{\n  state.primeroCaseId = state.data.id;\n  const formId = state.references[0]._xform_id;\n  const submissionId = state.references[0]._id;\n  return { ...state, formId, submissionId };\n})\n\ngetSubmission($.formId, $.submissionId);\n\nfn(state =>{\n  state.attachments = state.data._attachments;\n  return state;\n})\n\nfnIf($.attachments[0].id,\n  downloadAttachment($.attachments[0].id, {\n  filename: $.attachments[0].filename,\n  parseAs: 'base64',\n})\n);\n",
           "adaptor": "@openfn/language-inform@1.0.1",
-          "project_credential_id": null
+          "project_credential_id": "195db97a-720e-4420-ae80-20f6476d0637"
         },
         "Upload-attachment-to-Primero": {
           "id": "42bad203-dfcd-456f-8b69-c90eebc9b9ec",
           "name": "Upload attachment to Primero",
           "body": "// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\n\nfn(async (state) => {\n  const attachments = state.attachments[0]; \n  const imageEncodedString = state.data; \n\n  delete state.data; \n\n  state.data = {\n    attachment: imageEncodedString,\n    attachment_type: \"image\",         \n    content_type: attachments.mimetype,\n    date: new Date().toISOString(),\n    field_name: \"photos\",            \n    file_name: attachments.name,\n    is_current: false\n  };\n\n  return state;\n});\n\n\nhttp.post(`cases/${$.primeroCaseId}/attachments`, $.data)\n",
           "adaptor": "@openfn/language-primero@3.1.0",
-          "project_credential_id": "e4033ea3-5b3e-42cb-a6a7-9decead47c92"
+          "project_credential_id": "1a59427b-3460-4c16-9dd4-6dfc033967f5"
         }
       },
       "edges": {
@@ -332,7 +343,6 @@
       }
     }
   },
-  "version_history": [],
   "allow_support_access": true,
   "requires_mfa": false
 }
