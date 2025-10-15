@@ -19,31 +19,6 @@ credentials:
     name: Unicef Inform
     owner: aleksa@openfn.org
 workflows:
-  auth-testing:
-    name: auth-testing
-    jobs:
-      primero-auth-test:
-        name: primero auth test
-        adaptor: '@openfn/language-primero@4.0.2'
-        credential: aleksa@openfn.org-PROD-Unicare-TUR-Primero
-        body: |
-          // Check out the Job Writing Guide for help getting started:
-          // https://docs.openfn.org/documentation/jobs/job-writing-guide
-
-          getLocations({
-          page: 1,
-          per: 2
-          })
-    triggers:
-      webhook:
-        type: webhook
-        enabled: false
-    edges:
-      webhook->primero-auth-test:
-        source_trigger: webhook
-        target_job: primero-auth-test
-        condition_type: always
-        enabled: true
   inform-to-unicare-bih-demo:
     name: inform-to-unicare-bih-demo
     jobs:
@@ -1486,6 +1461,37 @@ workflows:
               "67": "TUR067"
           };
 
+            const programMapping = {
+              'Pending_categorization': 'local_integration_4721a6c',
+              'Not_applicable': 'sexual_exploitation_and_abuse__sea__c2b098e',
+              'Adolescent_Development_and_Participation': 'a__adolescent_development_and_participation_b19f2ba',
+              'Access_and_Logistics': 'logistics_f1ce006',
+              'Camp_Coordination_and_Camp_Management': 'camp_coordination_and_camp_management__cccm__e9d90b3',
+              'Cash_Assistance_and_Social_Protection': 'cash_assistance_086f72b',
+              'Civil-Military_Coordination': 'civil_military_coordination_87b1aca',
+              'Child_Protection': 'child_protection_72b4d71',
+              'Disability_and_Inclusion': 'disability_and_inclusion_e537ca8',
+              'Early_Childhood_Development': 'early_childhood_development_2c517c5',
+              'Education': 'education_d3bfe8f',
+              'Early_Recovery': 'early_recovery_c6e511c',
+              'Emergency_Telecommunications': 'emergency_telecommunications_ee553b2',
+              'Energy_and_Environment': 'energy_and_environment_fd73e2b',
+              'Food_Security_and_Livelihoods': 'food_security_0e10495',
+              'Gender_Based_Violence': 'gender_based_violence__gbv__781a991',
+              'Health_and_Immunisation': 'health_ee4020e',
+              'Housing,_Land_and_Property': 'housing__land_and_property_109da85',
+              'Mental_Health_and_Psychosocial_Support': 'mental_health_and_psychosocial_support__mhpss__abac8de',
+              'Migrants': 'migrants__registration__resettlement__rsd__repatriation__local_integration__complementary_pathways__etc___aa10d1b',
+              'Mine_Action': 'mine_action_f5161ba',
+              'NFI': 'nfi_9c241b4',
+              'Nutrition': 'nutrition_03abf98',
+              'Parenting': 'parenting_84b0c4c',
+              'Protection': 'protection_0e30687',
+              'Shelter': 'shelter_ae9eb74',
+              'Social_and_Behaviour_Change': 'social_and_behaviour_change__sbc__b64e02a',
+              'WASH': 'wash_d59fd40',
+            }
+
             const vulnerabilityMapping = {
               "None": "none_9052aa8",
               "Alcohol_drug_abuse_in_family": "alcohol__drug_abuse_in_family_0e1da79",
@@ -1547,6 +1553,11 @@ workflows:
                 .split(" ")
                 .map(factor => programmaticAreaMapping[factor])
                 .filter(Boolean),
+              //added below mapping - Oct 15
+              programmatic_area_26ac9e6:  (state.data.programmatic_area || "")
+                .split(" ")
+                .map(factor => programmaticAreaMapping[factor])
+                .filter(Boolean),
               location_current: locationMapping[state.data.location],
               diversity_factor_s__98eb91b: (state.data.vulnerability_factor || "")
                 .split(" ")
@@ -1559,7 +1570,8 @@ workflows:
               consent_assent_obtained_from_c4a5c9e: (state.data.consent || "")
                 .split(" ")
                 .map(factor => consentFromMapping[factor])
-                .filter(Boolean)
+                .filter(Boolean),
+              
             }
 
             return state;
@@ -1604,6 +1616,7 @@ workflows:
               other_language_of_interaction_00ed07f: state.data.language_comment,
               diversity_factor_s__98eb91b: state.mappedData.diversity_factor_s__98eb91b,
               feedback_channel_eba5764: 'mobile_teams__field_staff__monitors_afdfc51',
+              programmatic_area_26ac9e6: state.mappedData.programmatic_area_26ac9e6,
               module_id: "primeromodule-cp",
             }),
           });
@@ -2299,4 +2312,29 @@ workflows:
         source_job: Get-attachment-From-Inform
         target_job: Upload-attachment-to-Primero
         condition_type: on_job_success
+        enabled: true
+  x-auth-testing:
+    name: x-auth-testing
+    jobs:
+      primero-auth-test:
+        name: primero auth test
+        adaptor: '@openfn/language-primero@4.0.2'
+        credential: aleksa@openfn.org-PROD-Unicare-TUR-Primero
+        body: |
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+
+          getLocations({
+          page: 1,
+          per: 2
+          })
+    triggers:
+      webhook:
+        type: webhook
+        enabled: false
+    edges:
+      webhook->primero-auth-test:
+        source_trigger: webhook
+        target_job: primero-auth-test
+        condition_type: always
         enabled: true
