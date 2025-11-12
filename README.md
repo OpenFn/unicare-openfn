@@ -112,3 +112,9 @@ Administrators should review the integration configuration when changes are made
 All job logic and field mappings are maintained in the OpenFn project. For complex updates or reconfiguration, the support of a developer or OpenFn administrator may be required.
 
 [Access the OpenFn Project](https://app.openfn.org/projects/75b5159b-0102-4005-9fb7-2afa1693912e/w/020fd1c0-46dd-4f4f-ae3c-224fcca1fd0b?a=6fab331e-4f6a-4167-9219-c7ce28bbcf2d&s=46fa271d-2124-4a95-8b79-233392bd0a5a)
+
+## 9. References & Training Materials
+
+- 📘 **Training Materials:** [View training slides and video](https://drive.google.com/drive/folders/1MtLgXV_89-a3T__uwPskKuoXdEhrsLsv?usp=drive_link)
+- 📖 **OpenFn Documentation:** [Learn more about building and managing integrations on OpenFn](https://docs.openfn.org)
+
