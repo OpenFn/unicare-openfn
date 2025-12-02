@@ -1,6 +1,7 @@
 name: unicare-bih-turkey
 description: |
   UNICARE workflows for InForm-Primero data sync for Turkey and Bosnia country offices
+
 collections: null
 credentials:
   aleksa@openfn.org-PROD-Unicare-BiH-Primero:
@@ -951,7 +952,7 @@ workflows:
       Register-feedback-in-Primero:
         name: Register feedback in Primero
         adaptor: '@openfn/language-primero@3.1.0'
-        credential: null
+        credential: aleksa@openfn.org-PROD-Unicare-BiH-Primero
         body: |
           // //Create/Update case to be sent to primero
           fn(state => {
@@ -993,7 +994,7 @@ workflows:
       Get-attachment-From-Inform:
         name: Get attachment From Inform
         adaptor: '@openfn/language-inform@1.0.1'
-        credential: null
+        credential: aleksa@openfn.org-Unicef-Inform
         body: |
           // Check out the Job Writing Guide for help getting started:
           // https://docs.openfn.org/documentation/jobs/job-writing-guide
@@ -1011,7 +1012,7 @@ workflows:
       Upload-attachment-to-Primero:
         name: Upload attachment to Primero
         adaptor: '@openfn/language-primero@3.1.0'
-        credential: null
+        credential: aleksa@openfn.org-PROD-Unicare-BiH-Primero
         body: |
           // Check out the Job Writing Guide for help getting started:
           // https://docs.openfn.org/documentation/jobs/job-writing-guide
@@ -2289,16 +2290,6 @@ workflows:
         type: webhook
         enabled: true
     edges:
-      webhook->Transform-and-Map-data:
-        source_trigger: webhook
-        target_job: Transform-and-Map-data
-        condition_type: always
-        enabled: true
-      Transform-and-Map-data->Register-feedback-in-Primero:
-        source_job: Transform-and-Map-data
-        target_job: Register-feedback-in-Primero
-        condition_type: on_job_success
-        enabled: true
       Register-feedback-in-Primero->Get-attachment-From-Inform:
         source_job: Register-feedback-in-Primero
         target_job: Get-attachment-From-Inform
@@ -2311,6 +2302,16 @@ workflows:
       Get-attachment-From-Inform->Upload-attachment-to-Primero:
         source_job: Get-attachment-From-Inform
         target_job: Upload-attachment-to-Primero
+        condition_type: on_job_success
+        enabled: true
+      webhook->Transform-and-Map-data:
+        source_trigger: webhook
+        target_job: Transform-and-Map-data
+        condition_type: always
+        enabled: true
+      Transform-and-Map-data->Register-feedback-in-Primero:
+        source_job: Transform-and-Map-data
+        target_job: Register-feedback-in-Primero
         condition_type: on_job_success
         enabled: true
   x-auth-testing:
@@ -2328,6 +2329,7 @@ workflows:
           page: 1,
           per: 2
           })
+
     triggers:
       webhook:
         type: webhook
