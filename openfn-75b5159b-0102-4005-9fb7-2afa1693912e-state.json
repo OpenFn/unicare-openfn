@@ -4,15 +4,17 @@
   "name": "unicare-bih-turkey",
   "description": "UNICARE workflows for InForm-Primero data sync for Turkey and Bosnia country offices\n",
   "color": null,
-  "concurrency": null,
   "inserted_at": "2025-02-28T09:01:31Z",
   "updated_at": "2025-11-25T09:55:06Z",
   "channels": {},
   "parent_id": null,
+  "concurrency": null,
   "scheduled_deletion": null,
   "history_retention_period": 7,
-  "dataclip_retention_period": null,
+  "dataclip_retention_period": 7,
   "retention_policy": "erase_all",
+  "allow_support_access": true,
+  "collections": {},
   "project_credentials": {
     "aleksa@openfn.org-Unicare-BIH-Primero-Demo": {
       "id": "687e2087-42c2-4e7c-996d-c6baa3bc40ab",
@@ -40,8 +42,6 @@
       "owner": "aleksa@openfn.org"
     }
   },
-  "allow_support_access": true,
-  "collections": {},
   "requires_mfa": false,
   "workflows": {
     "x-auth-testing": {
